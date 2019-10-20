@@ -61,7 +61,7 @@ marker
   = [A-Z]
 
 mnemonic
-  = letters:('s'? [aor4ztsk56789]) { return letters.join("") }
+  = letters:('g'? [aor4ztsk56789]) { return letters.join("") }
 
 length
   = '/' frac:integer { return parseInt(frac) }

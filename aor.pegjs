@@ -43,9 +43,24 @@ event
     ws*
     {
       return toObject([
-        ['note',         mnemonic],
+        ['type',         'note'],
+        ['position',     mnemonic],
         ['length',       length || 1],
         ['articulation', articulation],
+        ['mark',         mark],
+        ['jump',         jump]
+      ])
+    }
+  / mark:mark?
+    '0'
+    length:length?
+    articulation:articulation?
+    jump:jump?
+    ws*
+    {
+      return toObject([
+        ['type',         'rest'],
+        ['length',       length || 1],
         ['mark',         mark],
         ['jump',         jump]
       ])
@@ -69,6 +84,7 @@ length
   = n:integer '/' d:integer { return parseInt(n) / parseInt(d) }
   / '/' d:integer { return 1 / parseInt(d) }
   / '/' { return 1/2 }
+  / n:integer { return parseInt(n) }
 
 articulation
   = '\'' { return "hammer" }

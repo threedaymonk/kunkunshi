@@ -66,8 +66,9 @@ mnemonic
   = letters:('g'? [aor4ztsk56789]) { return letters.join("") }
 
 length
-  = '/' frac:integer { return parseInt(frac) }
-  / '/' { return 2 }
+  = n:integer '/' d:integer { return parseInt(n) / parseInt(d) }
+  / '/' d:integer { return 1 / parseInt(d) }
+  / '/' { return 1/2 }
 
 articulation
   = '\'' { return "hammer" }

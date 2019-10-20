@@ -35,6 +35,10 @@ music
   { return events }
 
 event
+  = noteEvent
+  / restEvent
+
+noteEvent
   = mark:mark?
     mnemonic:mnemonic
     length:length?
@@ -51,7 +55,9 @@ event
         ['jump',         jump]
       ])
     }
-  / mark:mark?
+
+restEvent
+  = mark:mark?
     '0'
     length:length?
     articulation:articulation?

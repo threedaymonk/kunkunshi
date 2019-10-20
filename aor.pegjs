@@ -35,29 +35,31 @@ music
   { return events }
 
 event
-  = beginRepeat:beginRepeat?
+  = mark:mark?
     mnemonic:mnemonic
     length:length?
     articulation:articulation?
-    endRepeat:endRepeat?
+    jump:jump?
     ws*
     {
       return toObject([
         ['note',         mnemonic],
         ['length',       length || 1],
         ['articulation', articulation],
-        ['begin',        beginRepeat],
-        ['end',          endRepeat]
+        ['mark',         mark],
+        ['jump',         jump]
       ])
     }
 
-beginRepeat
-  = marker:marker '>' ws* { return marker }
+mark
+  = '->' ws* { return 'A' }
+  / markID:markID '>' ws* { return markID }
 
-endRepeat
-  = ws* '<' marker:marker { return marker }
+jump
+  = ws* '<-' { return 'A' }
+  / ws* '<' markID:markID { return markID }
 
-marker
+markID
   = [A-Z]
 
 mnemonic

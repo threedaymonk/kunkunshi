@@ -1,19 +1,8 @@
 {
-  function fromEntries(iterable) {
+  function toObject(iterable) {
     const result = {};
     for (const [key, value] of iterable) {
-      let coercedKey;
-      if (typeof key === 'string' || typeof key === 'symbol') {
-        coercedKey = key;
-      } else {
-        coercedKey = String(key);
-      }
-      Object.defineProperty(result, coercedKey, {
-        value,
-        writable: true,
-        enumerable: true,
-        configurable: true,
-      });
+      if (value) result[key] = value;
     }
     return result;
   }
@@ -26,7 +15,7 @@ document
     { return { metadata: metadata, music: music } }
 
 metadata
-  = pairs:mdPair* { return fromEntries(pairs) }
+  = pairs:mdPair* { return toObject(pairs) }
 
 mdPair
   = key:mdKey
@@ -53,13 +42,13 @@ event
     endRepeat:endRepeat?
     ws*
     {
-      return fromEntries([
-        ['note', mnemonic],
-        ['length', length || 1],
+      return toObject([
+        ['note',         mnemonic],
+        ['length',       length || 1],
         ['articulation', articulation],
-        ['begin', beginRepeat],
-        ['end', endRepeat]
-      ].filter(a => a[1]))
+        ['begin',        beginRepeat],
+        ['end',          endRepeat]
+      ])
     }
 
 beginRepeat

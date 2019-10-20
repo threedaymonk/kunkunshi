@@ -60,7 +60,6 @@ restEvent
   = mark:mark?
     '0'
     length:length?
-    articulation:articulation?
     jump:jump?
     ws*
     {

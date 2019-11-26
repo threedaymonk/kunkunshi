@@ -3,7 +3,7 @@ const stripIndent = require("common-tags").stripIndent;
 const parser = require("../aor-parser.js");
 
 describe("Parser", () => {
-  describe("headers", () => {
+  describe("metadata", () => {
     it("extracts multiple headers", () => {
       let input = stripIndent`
         Title: Hello World
@@ -20,7 +20,7 @@ describe("Parser", () => {
     });
   });
 
-  describe("notes", () => {
+  describe("music", () => {
     it("parses notes", () => {
       let input = stripIndent`
         Title: Test

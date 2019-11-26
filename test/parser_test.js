@@ -76,7 +76,19 @@ describe("Parser", () => {
         "na", "no",
         "nr", "n4", "nz", "nt",
         "ns", "nk", "n5", "n6", "n7"
-      ]
+      ];
+
+      expect(parser.parse(input).music.map((n) => n.position))
+        .to.eql(expected)
+    });
+
+    it("parses 下- and 亻-prefixed positions", () => {
+      let input = stripIndent`
+        Title: Test
+
+        gns gnr
+      `
+      let expected = ["gns", "gnr"];
 
       expect(parser.parse(input).music.map((n) => n.position))
         .to.eql(expected)

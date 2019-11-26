@@ -13,4 +13,9 @@
   },
   "homepage": "https://github.com/threedaymonk/aiotsu#readme",
   "private": true,
+  "dependencies": {
+    "chai": "^4.2.0",
+    "common-tags": "^1.8.0",
+    "mocha": "^6.2.2"
+  }
 }

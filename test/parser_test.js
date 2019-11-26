@@ -2,9 +2,9 @@ const expect = require("chai").expect;
 const stripIndent = require("common-tags").stripIndent;
 const parser = require("../aor-parser.js");
 
-describe("Parser", () => {
-  describe("metadata", () => {
-    it("extracts multiple headers", () => {
+describe("Parser", function() {
+  describe("metadata", function() {
+    it("extracts multiple headers", function() {
       let input = stripIndent`
         Title: Hello World
         Info: I am an example string
@@ -20,8 +20,8 @@ describe("Parser", () => {
     });
   });
 
-  describe("music", () => {
-    it("parses notes", () => {
+  describe("music", function() {
+    it("parses notes", function() {
       let input = stripIndent`
         Title: Test
 
@@ -36,7 +36,7 @@ describe("Parser", () => {
         ]);
     });
 
-    it("parses basic positions", () => {
+    it("parses basic positions", function() {
       let input = stripIndent`
         Title: Test
 
@@ -53,7 +53,7 @@ describe("Parser", () => {
         ]);
     });
 
-    it("parses 下-prefixed positions (g = ge)", () => {
+    it("parses 下-prefixed positions (g = ge)", function() {
       let input = stripIndent`
         Title: Test
 
@@ -64,7 +64,7 @@ describe("Parser", () => {
         .to.eql(["gs", "gr"]);
     });
 
-    it("parses 亻-prefixed positions (n = ninben)", () => {
+    it("parses 亻-prefixed positions (n = ninben)", function() {
       let input = stripIndent`
         Title: Test
 
@@ -81,7 +81,7 @@ describe("Parser", () => {
         ]);
     });
 
-    it("parses 下- and 亻-prefixed positions", () => {
+    it("parses 下- and 亻-prefixed positions", function() {
       let input = stripIndent`
         Title: Test
 
@@ -92,7 +92,7 @@ describe("Parser", () => {
         .to.eql(["gns", "gnr"]);
     });
 
-    it("parses note lengths", () => {
+    it("parses note lengths", function() {
       let input = stripIndent`
         Title: Test
 
@@ -103,7 +103,7 @@ describe("Parser", () => {
         .to.eql([1, 0.5, 0.5, 0.5, 0.25, 1.5, 2]);
     });
 
-    it("parses rests", () => {
+    it("parses rests", function() {
       let input = stripIndent`
         Title: Test
 
@@ -118,7 +118,7 @@ describe("Parser", () => {
         ]);
     });
 
-    it("applies repetition start marker to next note", () => {
+    it("applies repetition start marker to next note", function() {
       let input = stripIndent`
         Title: Test
 
@@ -129,7 +129,7 @@ describe("Parser", () => {
         .to.eql([undefined, "A", "A", "B", "C", undefined]);
     });
 
-    it("applies repetition end marker to preceding note", () => {
+    it("applies repetition end marker to preceding note", function() {
       let input = stripIndent`
         Title: Test
 
@@ -141,7 +141,7 @@ describe("Parser", () => {
         .to.eql([undefined, "A", "A", "B", "C", undefined]);
     });
 
-    it("applies articulations to notes", () => {
+    it("applies articulations to notes", function() {
       let input = stripIndent`
         Title: Test
 

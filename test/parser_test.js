@@ -10,11 +10,11 @@ describe("Parser", () => {
         Info: I am an example string
 
         a
-      `
-      let expected = { "Title": "Hello World", "Info": "I am an example string" }
+      `;
+      let expected = { "Title": "Hello World", "Info": "I am an example string" };
 
       expect(parser.parse(input).metadata)
-        .to.eql(expected)
+        .to.eql(expected);
     });
   });
 
@@ -24,14 +24,14 @@ describe("Parser", () => {
         Title: Test
 
         a o r
-      `
+      `;
       let expected = [
         {type: "note", position: "a", length: 1},
         {type: "note", position: "o", length: 1},
         {type: "note", position: "r", length: 1},
       ];
 
-      expect(parser.parse(input).music).to.eql(expected)
+      expect(parser.parse(input).music).to.eql(expected);
     });
 
     it("parses basic positions", () => {
@@ -41,7 +41,7 @@ describe("Parser", () => {
         a o r
         4 z t s
         k 5 6 7 8 9
-      `
+      `;
       let expected = [
         "a", "o", "r",
         "4", "z", "t", "s",
@@ -49,7 +49,7 @@ describe("Parser", () => {
       ];
 
       expect(parser.parse(input).music.map((n) => n.position))
-        .to.eql(expected)
+        .to.eql(expected);
     });
 
     it("parses 下-prefixed positions (g = ge)", () => {
@@ -57,11 +57,11 @@ describe("Parser", () => {
         Title: Test
 
         gs gr
-      `
+      `;
       let expected = ["gs", "gr"];
 
       expect(parser.parse(input).music.map((n) => n.position))
-        .to.eql(expected)
+        .to.eql(expected);
     });
 
     it("parses 亻-prefixed positions (n = ninben)", () => {
@@ -71,7 +71,7 @@ describe("Parser", () => {
         na no
         nr n4 nz nt
         ns nk n5 n6 n7
-      `
+      `;
       let expected = [
         "na", "no",
         "nr", "n4", "nz", "nt",
@@ -79,7 +79,7 @@ describe("Parser", () => {
       ];
 
       expect(parser.parse(input).music.map((n) => n.position))
-        .to.eql(expected)
+        .to.eql(expected);
     });
 
     it("parses 下- and 亻-prefixed positions", () => {
@@ -87,11 +87,11 @@ describe("Parser", () => {
         Title: Test
 
         gns gnr
-      `
+      `;
       let expected = ["gns", "gnr"];
 
       expect(parser.parse(input).music.map((n) => n.position))
-        .to.eql(expected)
+        .to.eql(expected);
     });
 
     it("parses note lengths", () => {
@@ -99,11 +99,11 @@ describe("Parser", () => {
         Title: Test
 
         a a/ a/2 a1/2 a/4 a3/2 a2
-      `
+      `;
       let expected = [1, 0.5, 0.5, 0.5, 0.25, 1.5, 2];
 
       expect(parser.parse(input).music.map((n) => n.length))
-        .to.eql(expected)
+        .to.eql(expected);
     });
 
     it("parses rests", () => {
@@ -111,14 +111,14 @@ describe("Parser", () => {
         Title: Test
 
         0 0/2 03/4
-      `
+      `;
       let expected = [
         {type: "rest", length: 1},
         {type: "rest", length: 0.5},
         {type: "rest", length: 0.75}
-      ]
+      ];
 
-      expect(parser.parse(input).music).to.eql(expected)
+      expect(parser.parse(input).music).to.eql(expected);
     });
 
     it("applies repetition start marker to next note", () => {
@@ -126,11 +126,11 @@ describe("Parser", () => {
         Title: Test
 
         a -> a A> a B> a C> a a
-      `
+      `;
 
-      let expected = [undefined, "A", "A", "B", "C", undefined]
+      let expected = [undefined, "A", "A", "B", "C", undefined];
 
-      expect(parser.parse(input).music.map((n) => n.mark)).to.eql(expected)
+      expect(parser.parse(input).music.map((n) => n.mark)).to.eql(expected);
     });
 
     it("applies repetition end marker to preceding note", () => {
@@ -138,11 +138,11 @@ describe("Parser", () => {
         Title: Test
 
         a a <- a <A a <B a <C a
-      `
+      `;
 
-      let expected = [undefined, "A", "A", "B", "C", undefined]
+      let expected = [undefined, "A", "A", "B", "C", undefined];
 
-      expect(parser.parse(input).music.map((n) => n.jump)).to.eql(expected)
+      expect(parser.parse(input).music.map((n) => n.jump)).to.eql(expected);
     });
   });
 });

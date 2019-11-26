@@ -1,0 +1,16 @@
+{
+  "name": "aiotsu",
+  "version": "0.0.1",
+  "description": "ASCII-compatible sanshin notation",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": "git+https://github.com/threedaymonk/aiotsu.git",
+  "author": "Paul Battley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/threedaymonk/aiotsu/issues"
+  },
+  "homepage": "https://github.com/threedaymonk/aiotsu#readme",
+  "private": true,
+}

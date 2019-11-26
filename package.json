@@ -16,6 +16,7 @@
   "dependencies": {
     "chai": "^4.2.0",
     "common-tags": "^1.8.0",
+    "eslint": "^6.7.1",
     "mocha": "^6.2.2",
     "pegjs": "^0.10.0"
   }

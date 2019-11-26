@@ -83,7 +83,7 @@ markID
   = [A-Z]
 
 mnemonic
-  = letters:('g'? [aor4ztsk56789]) { return letters.join("") }
+  = letters:([gn]? [aor4ztsk56789]) { return letters.join("") }
 
 length
   = n:integer '/' d:integer { return parseInt(n) / parseInt(d) }

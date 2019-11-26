@@ -64,6 +64,24 @@ describe("Parser", () => {
         .to.eql(expected)
     });
 
+    it("parses 亻-prefixed positions (n = ninben)", () => {
+      let input = stripIndent`
+        Title: Test
+
+        na no
+        nr n4 nz nt
+        ns nk n5 n6 n7
+      `
+      let expected = [
+        "na", "no",
+        "nr", "n4", "nz", "nt",
+        "ns", "nk", "n5", "n6", "n7"
+      ]
+
+      expect(parser.parse(input).music.map((n) => n.position))
+        .to.eql(expected)
+    });
+
     it("parses fractional note lengths", () => {
       let input = stripIndent`
         Title: Test

@@ -82,13 +82,13 @@ describe("Parser", () => {
         .to.eql(expected)
     });
 
-    it("parses fractional note lengths", () => {
+    it("parses note lengths", () => {
       let input = stripIndent`
         Title: Test
 
-        a a/ a/2 a1/2 a/4 a3/2
+        a a/ a/2 a1/2 a/4 a3/2 a2
       `
-      let expected = [1, 0.5, 0.5, 0.5, 0.25, 1.5];
+      let expected = [1, 0.5, 0.5, 0.5, 0.25, 1.5, 2];
 
       expect(parser.parse(input).music.map((n) => n.length))
         .to.eql(expected)

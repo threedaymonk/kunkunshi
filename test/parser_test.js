@@ -140,5 +140,17 @@ describe("Parser", () => {
       expect(parser.parse(input).music.map((n) => n.jump))
         .to.eql([undefined, "A", "A", "B", "C", undefined]);
     });
+
+    it("applies articulations to notes", () => {
+      let input = stripIndent`
+        Title: Test
+
+        a a' a1/2' a^ a/^
+      `;
+
+
+      expect(parser.parse(input).music.map((n) => n.articulation))
+        .to.eql([undefined, "hammer", "hammer", "upstroke", "upstroke"]);
+    });
   });
 });

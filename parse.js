@@ -4,7 +4,7 @@ const parser = require("./aor-parser.js");
 
 const filename = process.argv[2];
 console.log(`Processing ${filename}`);
-let input = fs.readFileSync(filename, 'UTF-8');
+let input = fs.readFileSync(filename, "UTF-8");
 let tree;
 
 try {

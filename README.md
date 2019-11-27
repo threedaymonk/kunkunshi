@@ -17,7 +17,7 @@ A file consists of one or more lines of metadata, a blank line, and one or more
 musical expressions, e.g.:
 
     Title: てぃんさぐぬ花
-    Tuning: 3
+    Tuning: 3s
 
     -> t t/ 5/ k/ t/' z 4 a/ r/' 4 5 t t/ 5/ k/ t/' z
     4 a/ r/' <- t t/ 5/ k/ t/' z 4 a/ r/' 4 5
@@ -40,8 +40,15 @@ The title of the piece.
 
 #### Tuning
 
-This can be `h` for honchōshi (本調子), `2` for niage (二揚げ), or `3` for
-sansage (三下げ). If not specified, honchōshi is assumed.
+The following tunings are defined:
+
+| Mnemonic | Name   | Transliteration |
+|----------|--------|-----------------|
+| `h`      | 本調子 | honchōshi       |
+| `2a`     | 二揚げ | niage           |
+| `3s`     | 三下げ | sansage         |
+
+If not specified, honchōshi is assumed.
 
 ### Positions
 

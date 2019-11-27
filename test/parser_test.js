@@ -45,7 +45,7 @@ describe("Parser", function() {
         k 5 6 7 8 9
       `;
 
-      expect(parser.parse(input).music.map((n) => n.position))
+      expect(parser.parse(input).music.map(n => n.position))
         .to.eql([
           "a", "o", "r",
           "4", "z", "t", "s",
@@ -60,7 +60,7 @@ describe("Parser", function() {
         gs gr
       `;
 
-      expect(parser.parse(input).music.map((n) => n.position))
+      expect(parser.parse(input).music.map(n => n.position))
         .to.eql(["gs", "gr"]);
     });
 
@@ -73,7 +73,7 @@ describe("Parser", function() {
         ns nk n5 n6 n7
       `;
 
-      expect(parser.parse(input).music.map((n) => n.position))
+      expect(parser.parse(input).music.map(n => n.position))
         .to.eql([
           "na", "no",
           "nr", "n4", "nz", "nt",
@@ -88,7 +88,7 @@ describe("Parser", function() {
         gns gnr
       `;
 
-      expect(parser.parse(input).music.map((n) => n.position))
+      expect(parser.parse(input).music.map(n => n.position))
         .to.eql(["gns", "gnr"]);
     });
 
@@ -99,7 +99,7 @@ describe("Parser", function() {
         a a/ a/2 a1/2 a/4 a3/2 a2
       `;
 
-      expect(parser.parse(input).music.map((n) => n.length))
+      expect(parser.parse(input).music.map(n => n.length))
         .to.eql([1, 0.5, 0.5, 0.5, 0.25, 1.5, 2]);
     });
 
@@ -125,7 +125,7 @@ describe("Parser", function() {
         a -> a A> a B> a C> a a
       `;
 
-      expect(parser.parse(input).music.map((n) => n.mark))
+      expect(parser.parse(input).music.map(n => n.mark))
         .to.eql([undefined, "A", "A", "B", "C", undefined]);
     });
 
@@ -137,7 +137,7 @@ describe("Parser", function() {
       `;
 
 
-      expect(parser.parse(input).music.map((n) => n.jump))
+      expect(parser.parse(input).music.map(n => n.jump))
         .to.eql([undefined, "A", "A", "B", "C", undefined]);
     });
 
@@ -149,7 +149,7 @@ describe("Parser", function() {
       `;
 
 
-      expect(parser.parse(input).music.map((n) => n.articulation))
+      expect(parser.parse(input).music.map(n => n.articulation))
         .to.eql([undefined, "hammer", "hammer", "upstroke", "upstroke"]);
     });
   });

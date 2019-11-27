@@ -9,6 +9,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:mocha/recommended"
   ],
+  "ignorePatterns": ["aor-parser.js"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"

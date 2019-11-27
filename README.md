@@ -13,18 +13,35 @@ mnemonic depends on the tuning in use.
 
 ## Syntax
 
-A file consists of metadata in the form `key: value`, one entry per line, a
-blank line, and one or more musical expressions, e.g.:
+A file consists of one or more lines of metadata, a blank line, and one or more
+musical expressions, e.g.:
 
-    Title: Tinsagu nu hana
-    Tuning: cfb'
+    Title: てぃんさぐぬ花
+    Tuning: 3
 
     -> t t/ 5/ k/ t/' z 4 a/ r/' 4 5 t t/ 5/ k/ t/' z
     4 a/ r/' <- t t/ 5/ k/ t/' z 4 a/ r/' 4 5
     t t/ 5/ 7 a 8 a 7 8 t t/ 5/ k/ t/' z
     4 a/ r/' 4 5 t t/ 5/ k/ t/' z 4 a/ r/' 4 5 <-
 
-Metadata is not formalised at this stage.
+### Metadata
+
+Metadata entries are in the form `key: value`, one entry per line.
+In principle, any information can be added as metadata, provided that:
+
+- Each key is unique
+- The value can fit on one line
+
+Some metadata is defined with a special meaning:
+
+#### Title
+
+The title of the piece.
+
+#### Tuning
+
+This can be `h` for honchōshi (本調子), `2` for niage (二揚げ), or `3` for
+sansage (三下げ). If not specified, honchōshi is assumed.
 
 ### Positions
 

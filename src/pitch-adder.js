@@ -11,7 +11,7 @@ const positions = [
 ];
 
 const scale = [
-  "c", "cs", "d", "ds", "e", "f", "fs", "g", "gs", "a", "as", "b"
+  "c", "df", "d", "ef", "e", "f", "gf", "g", "af", "a", "bf", "b"
 ];
 
 function buildPositionMap(offsets) {

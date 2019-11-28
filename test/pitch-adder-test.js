@@ -99,7 +99,7 @@ describe("addPitches", function() {
       it("reports the pitch of basic positions on middle string", function() {
         let input = generateMusic(["4", "z", "t", "s"]);
         expect(addPitches(input, options).map(n => n.pitch))
-          .to.eql(["f", "g", "a", "as"]);
+          .to.eql(["f", "g", "a", "bf"]);
       });
 
       it("reports the pitch of basic positions on highest string", function() {
@@ -148,7 +148,7 @@ describe("addPitches", function() {
           .to.eql([
             "c", "d",
             "e", "f", "g", "a",
-            "as", "c", "d", "e", "f"
+            "bf", "c", "d", "e", "f"
           ]);
       });
 
@@ -260,13 +260,13 @@ describe("addPitches", function() {
     it("reports the pitch of basic positions on middle string", function() {
       let input = generateMusic(["4", "z", "t", "s"]);
       expect(addPitches(input, options).map(n => n.pitch))
-        .to.eql(["f", "g", "a", "as"]);
+        .to.eql(["f", "g", "a", "bf"]);
     });
 
     it("reports the pitch of basic positions on highest string", function() {
       let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
       expect(addPitches(input, options).map(n => n.pitch))
-        .to.eql(["as", "c", "d", "e", "f", "g"]);
+        .to.eql(["bf", "c", "d", "e", "f", "g"]);
     });
 
     it("reports the pitch of g-prefixed positions", function() {
@@ -285,7 +285,7 @@ describe("addPitches", function() {
         .to.eql([
           "c", "d",
           "e", "f", "g", "a",
-          "as", "as", "c", "d", "e"
+          "bf", "bf", "c", "d", "e"
         ]);
     });
   });

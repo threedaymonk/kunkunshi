@@ -1,19 +1,20 @@
 const tunings = {
-  h: {
-    offsets: [0, 5, 12],
-    positions: [
-      ["a", "_", "o", "_", "r", "gr"],
-      ["4", "_", "z", "_", "t", "s", "_", "gs"],
-      ["k", "_", "5", "_", "6", "7", "_", "8", "_", "9"]
-    ]
-  }
+  "h":  {offsets: [0, 5, 12], changes: {}},
+  "2a": {offsets: [0, 7, 12], changes: {}},
+  "3s": {offsets: [0, 5, 10], changes: {"7": 1}}
 };
+
+const positions = [
+  ["a", "_", "o", "_", "r", "gr"],
+  ["4", "_", "z", "_", "t", "s", "_", "gs"],
+  ["k", "_", "5", "_", "6", "7", "_", "8", "_", "9"]
+];
 
 const scale = [
   "c", "cs", "d", "ds", "e", "f", "fs", "g", "gs", "a", "as", "b"
 ];
 
-function buildPositionMap(offsets, positions) {
+function buildPositionMap(offsets) {
   let result = {};
   offsets.forEach((stringOffset, i) => {
     positions[i].forEach((position, offset) => {
@@ -23,10 +24,10 @@ function buildPositionMap(offsets, positions) {
   return result;
 }
 
-function processEvent(positions, evt) {
+function processEvent(positionMap, evt) {
   if (evt.type == "note") {
     let unprefixedPos = evt.position.replace(/^n/, "");
-    let semitones = positions[unprefixedPos];
+    let semitones = positionMap[unprefixedPos];
     let pitch = scale[semitones % 12];
     let octave = Math.floor(semitones / 12);
     if (evt.position.match(/^n/)) octave++;
@@ -39,11 +40,14 @@ function processEvent(positions, evt) {
 
 function normalize(music, options) {
   let tuning = tunings[options.tuning || "h"];
-  let shaku = options.shaku || "h";
+  let shaku = options.shaku || "l";
+  let positionMap = buildPositionMap(tuning.offsets);
 
-  let positions = buildPositionMap(tuning.offsets, tuning.positions);
-  if (shaku == "h") positions["s"] += 1;
-  return music.map(e => processEvent(positions, e));
+  if (shaku == "h") positionMap["s"] += 1;
+  Object.keys(tuning.changes)
+    .forEach(k => positionMap[k] += tuning.changes[k]);
+
+  return music.map(e => processEvent(positionMap, e));
 }
 
 module.exports = {

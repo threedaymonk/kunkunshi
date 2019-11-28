@@ -1,2 +1,6 @@
 aor-parser.js
 node_modules
+yarn-error.log
+*.ly
+*.midi
+*.pdf

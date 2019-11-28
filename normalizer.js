@@ -40,10 +40,10 @@ function processEvent(positionMap, evt) {
 
 function normalize(music, options) {
   let tuning = tunings[options.tuning || "h"];
-  let shaku = options.shaku || "l";
+  let shaku = options.shaku || "low";
   let positionMap = buildPositionMap(tuning.offsets);
 
-  if (shaku == "h") positionMap["s"] += 1;
+  if (shaku == "high") positionMap["s"] += 1;
   Object.keys(tuning.changes)
     .forEach(k => positionMap[k] += tuning.changes[k]);
 

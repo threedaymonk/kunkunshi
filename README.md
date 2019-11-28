@@ -55,7 +55,7 @@ If not specified, honchōshi is assumed.
 There are two potential finger positions for 尺 depending on the piece: 5
 semitones above the open string for the "low" shaku, or six semitones for the
 "high" shaku. This field can thus be `high` or `low`. If not specified,
-`high` is assumed.
+`low` is assumed.
 
 ### Positions
 

@@ -8,7 +8,7 @@ describe("Normalizer", function() {
 
   describe("in honchōshi tuning", function() {
     describe("with high shaku", function() {
-      const options = {tuning: "h", shaku: "h"};
+      const options = {tuning: "h", shaku: "high"};
 
       it("reports the pitch of basic positions on lowest string", function() {
         let input = generateMusic(["a", "o", "r"]);
@@ -88,7 +88,7 @@ describe("Normalizer", function() {
     });
 
     describe("with low shaku", function() {
-      const options = {tuning: "h", shaku: "l"};
+      const options = {tuning: "h", shaku: "low"};
 
       it("reports the pitch of basic positions on lowest string", function() {
         let input = generateMusic(["a", "o", "r"]);

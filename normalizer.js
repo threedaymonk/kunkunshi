@@ -3,7 +3,7 @@ const tunings = {
     offsets: [0, 5, 12],
     positions: [
       ["a", "_", "o", "_", "r", "gr"],
-      ["4", "_", "z", "_", "t", "_", "s", "gs"],
+      ["4", "_", "z", "_", "t", "s", "_", "gs"],
       ["k", "_", "5", "_", "6", "7", "_", "8", "_", "9"]
     ]
   }
@@ -37,9 +37,12 @@ function processEvent(positions, evt) {
   }
 }
 
-function normalize(music) {
-  let tuning = tunings.h;
+function normalize(music, options) {
+  let tuning = tunings[options.tuning || "h"];
+  let shaku = options.shaku || "h";
+
   let positions = buildPositionMap(tuning.offsets, tuning.positions);
+  if (shaku == "h") positions["s"] += 1;
   return music.map(e => processEvent(positions, e));
 }
 

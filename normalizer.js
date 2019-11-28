@@ -40,6 +40,8 @@ function processEvent(positionMap, evt) {
 
 function normalize(music, options) {
   let tuning = tunings[options.tuning || "h"];
+  if (!tuning) throw `Unrecognised tuning: ${options.tuning}`;
+
   let shaku = options.shaku || "low";
   let positionMap = buildPositionMap(tuning.offsets);
 

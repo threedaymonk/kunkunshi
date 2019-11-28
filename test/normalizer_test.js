@@ -289,4 +289,13 @@ describe("Normalizer", function() {
         ]);
     });
   });
+
+  describe("with unrecognised tuning", function() {
+    const options = {tuning: "???"};
+
+    it("throws an exception", function() {
+      expect(function() { normalizer.normalize([], options); })
+        .to.throw("tuning");
+    });
+  });
 });

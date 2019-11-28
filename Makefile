@@ -1,6 +1,6 @@
 .PHONY: test lint
 
-all: lint test
+all: test lint
 
 test: aor-parser.js
 	yarn test

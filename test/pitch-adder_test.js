@@ -1,7 +1,7 @@
 const expect = require("chai").expect;
-const normalizer = require("../normalizer");
+const addPitches = require("../pitch-adder").addPitches;
 
-describe("Normalizer", function() {
+describe("addPitches", function() {
   function generateMusic(positions) {
     return positions.map(p => ({type: "note", position: p, length: 1}));
   }
@@ -12,49 +12,49 @@ describe("Normalizer", function() {
 
       it("reports the pitch of basic positions on lowest string", function() {
         let input = generateMusic(["a", "o", "r"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["c", "d", "e"]);
       });
 
       it("reports the pitch of basic positions on middle string", function() {
         let input = generateMusic(["4", "z", "t", "s"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["f", "g", "a", "b"]);
       });
 
       it("reports the pitch of basic positions on highest string", function() {
         let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["c", "d", "e", "f", "g", "a"]);
       });
 
       it("reports the octave of basic positions on lowest string", function() {
         let input = generateMusic(["a", "o", "r"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([0, 0, 0]);
       });
 
       it("reports the octave of basic positions on middle string", function() {
         let input = generateMusic(["4", "z", "t", "s"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([0, 0, 0, 0]);
       });
 
       it("reports the octave of basic positions on highest string", function() {
         let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([1, 1, 1, 1, 1, 1]);
       });
 
       it("reports the pitch of g-prefixed positions", function() {
         let input = generateMusic(["gr", "gs"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["f", "c"]);
       });
 
       it("reports the octave of g-prefixed positions", function() {
         let input = generateMusic(["gr", "gs"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([0, 1]);
       });
 
@@ -64,7 +64,7 @@ describe("Normalizer", function() {
           "nr", "n4", "nz", "nt",
           "ns", "nk", "n5", "n6", "n7"
         ]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql([
             "c", "d",
             "e", "f", "g", "a",
@@ -78,7 +78,7 @@ describe("Normalizer", function() {
           "nr", "n4", "nz", "nt",
           "ns", "nk", "n5", "n6", "n7"
         ]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([
             1, 1,
             1, 1, 1, 1,
@@ -92,49 +92,49 @@ describe("Normalizer", function() {
 
       it("reports the pitch of basic positions on lowest string", function() {
         let input = generateMusic(["a", "o", "r"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["c", "d", "e"]);
       });
 
       it("reports the pitch of basic positions on middle string", function() {
         let input = generateMusic(["4", "z", "t", "s"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["f", "g", "a", "as"]);
       });
 
       it("reports the pitch of basic positions on highest string", function() {
         let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["c", "d", "e", "f", "g", "a"]);
       });
 
       it("reports the octave of basic positions on lowest string", function() {
         let input = generateMusic(["a", "o", "r"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([0, 0, 0]);
       });
 
       it("reports the octave of basic positions on middle string", function() {
         let input = generateMusic(["4", "z", "t", "s"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([0, 0, 0, 0]);
       });
 
       it("reports the octave of basic positions on highest string", function() {
         let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([1, 1, 1, 1, 1, 1]);
       });
 
       it("reports the pitch of g-prefixed positions", function() {
         let input = generateMusic(["gr", "gs"]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql(["f", "c"]);
       });
 
       it("reports the octave of g-prefixed positions", function() {
         let input = generateMusic(["gr", "gs"]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([0, 1]);
       });
 
@@ -144,7 +144,7 @@ describe("Normalizer", function() {
           "nr", "n4", "nz", "nt",
           "ns", "nk", "n5", "n6", "n7"
         ]);
-        expect(normalizer.normalize(input, options).map(n => n.pitch))
+        expect(addPitches(input, options).map(n => n.pitch))
           .to.eql([
             "c", "d",
             "e", "f", "g", "a",
@@ -158,7 +158,7 @@ describe("Normalizer", function() {
           "nr", "n4", "nz", "nt",
           "ns", "nk", "n5", "n6", "n7"
         ]);
-        expect(normalizer.normalize(input, options).map(n => n.octave))
+        expect(addPitches(input, options).map(n => n.octave))
           .to.eql([
             1, 1,
             1, 1, 1, 1,
@@ -173,49 +173,49 @@ describe("Normalizer", function() {
 
     it("reports the pitch of basic positions on lowest string", function() {
       let input = generateMusic(["a", "o", "r"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["c", "d", "e"]);
     });
 
     it("reports the pitch of basic positions on middle string", function() {
       let input = generateMusic(["4", "z", "t", "s"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["g", "a", "b", "c"]);
     });
 
     it("reports the pitch of basic positions on highest string", function() {
       let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["c", "d", "e", "f", "g", "a"]);
     });
 
     it("reports the octave of basic positions on lowest string", function() {
       let input = generateMusic(["a", "o", "r"]);
-      expect(normalizer.normalize(input, options).map(n => n.octave))
+      expect(addPitches(input, options).map(n => n.octave))
         .to.eql([0, 0, 0]);
     });
 
     it("reports the octave of basic positions on middle string", function() {
       let input = generateMusic(["4", "z", "t", "s"]);
-      expect(normalizer.normalize(input, options).map(n => n.octave))
+      expect(addPitches(input, options).map(n => n.octave))
         .to.eql([0, 0, 0, 1]);
     });
 
     it("reports the octave of basic positions on highest string", function() {
       let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
-      expect(normalizer.normalize(input, options).map(n => n.octave))
+      expect(addPitches(input, options).map(n => n.octave))
         .to.eql([1, 1, 1, 1, 1, 1]);
     });
 
     it("reports the pitch of g-prefixed positions", function() {
       let input = generateMusic(["gr", "gs"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["f", "d"]);
     });
 
     it("reports the octave of g-prefixed positions", function() {
       let input = generateMusic(["gr", "gs"]);
-      expect(normalizer.normalize(input, options).map(n => n.octave))
+      expect(addPitches(input, options).map(n => n.octave))
         .to.eql([0, 1]);
     });
 
@@ -225,7 +225,7 @@ describe("Normalizer", function() {
         "nr", "n4", "nz", "nt",
         "ns", "nk", "n5", "n6", "n7"
       ]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql([
           "c", "d",
           "e", "g", "a", "b",
@@ -239,7 +239,7 @@ describe("Normalizer", function() {
         "nr", "n4", "nz", "nt",
         "ns", "nk", "n5", "n6", "n7"
       ]);
-      expect(normalizer.normalize(input, options).map(n => n.octave))
+      expect(addPitches(input, options).map(n => n.octave))
         .to.eql([
           1, 1,
           1, 1, 1, 1,
@@ -253,25 +253,25 @@ describe("Normalizer", function() {
 
     it("reports the pitch of basic positions on lowest string", function() {
       let input = generateMusic(["a", "o", "r"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["c", "d", "e"]);
     });
 
     it("reports the pitch of basic positions on middle string", function() {
       let input = generateMusic(["4", "z", "t", "s"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["f", "g", "a", "as"]);
     });
 
     it("reports the pitch of basic positions on highest string", function() {
       let input = generateMusic(["k", "5", "6", "7", "8", "9"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["as", "c", "d", "e", "f", "g"]);
     });
 
     it("reports the pitch of g-prefixed positions", function() {
       let input = generateMusic(["gr", "gs"]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql(["f", "c"]);
     });
 
@@ -281,7 +281,7 @@ describe("Normalizer", function() {
         "nr", "n4", "nz", "nt",
         "ns", "nk", "n5", "n6", "n7"
       ]);
-      expect(normalizer.normalize(input, options).map(n => n.pitch))
+      expect(addPitches(input, options).map(n => n.pitch))
         .to.eql([
           "c", "d",
           "e", "f", "g", "a",
@@ -294,7 +294,7 @@ describe("Normalizer", function() {
     const options = {tuning: "???"};
 
     it("throws an exception", function() {
-      expect(function() { normalizer.normalize([], options); })
+      expect(function() { addPitches([], options); })
         .to.throw("tuning");
     });
   });

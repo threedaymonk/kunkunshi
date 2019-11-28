@@ -38,7 +38,7 @@ function processEvent(positionMap, evt) {
   }
 }
 
-function normalize(music, options) {
+function addPitches(music, options) {
   let tuning = tunings[options.tuning || "h"];
   if (!tuning) throw `Unrecognised tuning: ${options.tuning}`;
 
@@ -53,5 +53,5 @@ function normalize(music, options) {
 }
 
 module.exports = {
-  normalize: normalize
+  addPitches: addPitches
 };

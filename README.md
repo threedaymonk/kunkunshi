@@ -107,7 +107,7 @@ The positions are thus:
 
 #### Upstroke
 
-An upstroke is notated by appending `^` to the note, after the length (if
+An upstroke is notated by appending `^` to the note, after the duration (if
 present):
 
     r1/2^
@@ -115,23 +115,23 @@ present):
 #### Hammer-on
 
 A hammer-on is notated by appending `'` (a single quote) to the note, after
-the length (if present):
+the duration (if present):
 
     t1/2'
 
-### Lengths
+### Durations
 
-The notation assumes a basic note length, as represented by a single grid cell
+The notation assumes a basic note duration, as represented by a single grid cell
 in kunkunshi.
 
-Lengths are in principle notated as fractions of this, so `a1/2` represents
-合 for half the basic note length.
+Durations are in principle notated as fractions of this, so `a1/2` represents
+合 for half the basic note duration.
 
 For convenience, the numerator can be omitted, so `a/4` is the same as `a1/4`.
 As a further convenience, the denominator is assumed to be 2, so `a/` is the
 same as `a1/2`.
 
-Other note lengths can in principle be notated as `a3/2` etc., although these
+Other note durations can in principle be notated as `a3/2` etc., although these
 do not commonly turn up in kunkunshi.
 
 ### Repetition

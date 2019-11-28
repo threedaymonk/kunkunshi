@@ -30,9 +30,9 @@ describe("Parser", function() {
 
       expect(parser.parse(input).music)
         .to.eql([
-          {type: "note", position: "a", length: 1},
-          {type: "note", position: "o", length: 1},
-          {type: "note", position: "r", length: 1},
+          {type: "note", position: "a", duration: 1},
+          {type: "note", position: "o", duration: 1},
+          {type: "note", position: "r", duration: 1},
         ]);
     });
 
@@ -92,14 +92,14 @@ describe("Parser", function() {
         .to.eql(["gns", "gnr"]);
     });
 
-    it("parses note lengths", function() {
+    it("parses note durations", function() {
       let input = stripIndent`
         Title: Test
 
         a a/ a/2 a1/2 a/4 a3/2 a2
       `;
 
-      expect(parser.parse(input).music.map(n => n.length))
+      expect(parser.parse(input).music.map(n => n.duration))
         .to.eql([1, 0.5, 0.5, 0.5, 0.25, 1.5, 2]);
     });
 
@@ -112,9 +112,9 @@ describe("Parser", function() {
 
       expect(parser.parse(input).music)
         .to.eql([
-          {type: "rest", length: 1},
-          {type: "rest", length: 0.5},
-          {type: "rest", length: 0.75}
+          {type: "rest", duration: 1},
+          {type: "rest", duration: 0.5},
+          {type: "rest", duration: 0.75}
         ]);
     });
 

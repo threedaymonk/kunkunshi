@@ -22,7 +22,7 @@ tree.music.forEach(note => {
   let subOffset = offset % 2;
   sequence[cell] = sequence[cell] || [];
   sequence[cell][subOffset] = note;
-  offset = offset + note.length * 2;
+  offset = offset + note.duration * 2;
 });
 
 console.log(util.inspect(sequence));

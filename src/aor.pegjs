@@ -41,7 +41,7 @@ event
 noteEvent
   = mark:mark?
     mnemonic:mnemonic
-    length:length?
+    duration:duration?
     articulation:articulation?
     jump:jump?
     ws*
@@ -49,7 +49,7 @@ noteEvent
       return toObject([
         ['type',         'note'],
         ['position',     mnemonic],
-        ['length',       length || 1],
+        ['duration',     duration || 1],
         ['articulation', articulation],
         ['mark',         mark],
         ['jump',         jump]
@@ -59,13 +59,13 @@ noteEvent
 restEvent
   = mark:mark?
     '0'
-    length:length?
+    duration:duration?
     jump:jump?
     ws*
     {
       return toObject([
         ['type',         'rest'],
-        ['length',       length || 1],
+        ['duration',     duration || 1],
         ['mark',         mark],
         ['jump',         jump]
       ])
@@ -85,7 +85,7 @@ markID
 mnemonic
   = letters:('g'? 'n'? [aor4ztsk56789]) { return letters.join("") }
 
-length
+duration
   = n:integer '/' d:integer { return parseInt(n) / parseInt(d) }
   / '/' d:integer { return 1 / parseInt(d) }
   / '/' { return 1/2 }

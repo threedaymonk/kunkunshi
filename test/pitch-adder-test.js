@@ -3,7 +3,7 @@ const addPitches = require("../src/pitch-adder").addPitches;
 
 describe("addPitches", function() {
   function generateMusic(positions) {
-    return positions.map(p => ({type: "note", position: p, length: 1}));
+    return positions.map(p => ({type: "note", position: p, duration: 1}));
   }
 
   describe("in honchōshi tuning", function() {

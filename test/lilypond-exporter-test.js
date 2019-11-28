@@ -26,15 +26,36 @@ describe("toLilypond", function() {
     expect(toLilypond(music)).to.eql("c4 d8 e4");
   });
 
-  it("marks changes in octave", function() {
+  it("does not mark changes in octave for small intervals", function() {
     let music = [
       {type: "note", duration: 1, pitch: "c", octave: 0},
+      {type: "note", duration: 1, pitch: "d", octave: 0},
+      {type: "note", duration: 1, pitch: "e", octave: 0},
+      {type: "note", duration: 1, pitch: "f", octave: 0},
+      {type: "note", duration: 1, pitch: "g", octave: 0},
+      {type: "note", duration: 1, pitch: "a", octave: 0},
+      {type: "note", duration: 1, pitch: "b", octave: 0},
       {type: "note", duration: 1, pitch: "c", octave: 1},
-      {type: "note", duration: 1, pitch: "c", octave: 2},
-      {type: "note", duration: 1, pitch: "c", octave: 1},
-      {type: "note", duration: 1, pitch: "c", octave: 0}
+      {type: "note", duration: 1, pitch: "d", octave: 1},
+      {type: "note", duration: 1, pitch: "e", octave: 1},
+      {type: "note", duration: 1, pitch: "f", octave: 1},
+      {type: "note", duration: 1, pitch: "g", octave: 1}
     ];
-    expect(toLilypond(music)).to.eql("c4 c' c' c, c,");
+    expect(toLilypond(music)).to.eql("c4 d e f g a b c d e f g");
+  });
+
+  it("marks changes in octave for large intervals", function() {
+    let music = [
+      {type: "note", duration: 1, pitch: "c", octave: 2},
+      {type: "note", duration: 1, pitch: "g", octave: 1},
+      {type: "note", duration: 1, pitch: "c", octave: 2},
+      {type: "note", duration: 1, pitch: "f", octave: 1},
+      {type: "note", duration: 1, pitch: "c", octave: 2},
+      {type: "note", duration: 1, pitch: "a", octave: 0},
+      {type: "note", duration: 1, pitch: "e", octave: 2},
+      {type: "note", duration: 1, pitch: "c", octave: 2}
+    ];
+    expect(toLilypond(music)).to.eql("c4 g c f, c' a, e'' c");
   });
 
   it("exports rests", function() {
@@ -59,15 +80,15 @@ describe("toLilypond", function() {
   it("exports nested repeats", function() {
     let music = [
       {type: "note", duration: 1, pitch: "c", octave: 0, mark: "A"},
+      {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "d", octave: 0},
+      {type: "note", duration: 1, pitch: "d", octave: 0, jump: "A"},
       {type: "note", duration: 1, pitch: "e", octave: 0},
-      {type: "note", duration: 1, pitch: "f", octave: 0, jump: "A"},
-      {type: "note", duration: 1, pitch: "g", octave: 0},
-      {type: "note", duration: 1, pitch: "a", octave: 0},
-      {type: "note", duration: 1, pitch: "b", octave: 0},
-      {type: "note", duration: 1, pitch: "c", octave: 0, jump: "A"}
+      {type: "note", duration: 1, pitch: "e", octave: 0},
+      {type: "note", duration: 1, pitch: "f", octave: 0},
+      {type: "note", duration: 1, pitch: "f", octave: 0, jump: "A"}
     ];
     expect(toLilypond(music))
-      .to.eql("\\repeat volta 2 { \\repeat volta 2 { c4 d e f } g a b c }");
+      .to.eql("\\repeat volta 2 { \\repeat volta 2 { c4 c d d } e e f f }");
   }); 
 });

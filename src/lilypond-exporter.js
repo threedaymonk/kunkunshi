@@ -1,12 +1,17 @@
+const scale = [
+  "c", "df", "d", "ef", "e", "f", "gf", "g", "af", "a", "bf", "b"
+];
+
 function translateDuration(l) {
   return 4 / l;
 }
 
-function showOctave(past, current) {
+function showOctave(interval) {
   let result = [];
-  let indicator = current > past ? "'" : ",";
-  let count = Math.abs(past - current);
-  for (let i = 0; i < count; i++) result.push(indicator);
+  let abs = Math.abs(interval);
+  let indicator = interval > 0 ? "'" : ",";
+  for (let i = abs; i > 5; i -= 12) result.push(indicator);
+
   return result.join("");
 }
 
@@ -17,8 +22,22 @@ function countRepeats(music) {
   }, {});
 }
 
+function absolutePitch(note, octave) {
+  return scale.indexOf(note) + octave * 12;
+}
+
+function interval(lastNote, lastOctave, currentNote, currentOctave) {
+  if (!lastNote) return null;
+
+  let lastAbs = absolutePitch(lastNote, lastOctave);
+  let currentAbs = absolutePitch(currentNote, currentOctave);
+
+  return currentAbs - lastAbs;
+}
+
 function toLilypond(music) {
   let lastDuration = null;
+  let lastPitch = null;
   let lastOctave = 0;
   let repeatCounts = countRepeats(music);
   let result = [];
@@ -34,8 +53,9 @@ function toLilypond(music) {
     switch(evt.type) {
     case "note":
       element += evt.pitch;
-      element += showOctave(lastOctave, evt.octave);
+      element += showOctave(interval(lastPitch, lastOctave, evt.pitch, evt.octave));
       lastOctave = evt.octave;
+      lastPitch = evt.pitch;
       break;
     case "rest":
       element += "r";

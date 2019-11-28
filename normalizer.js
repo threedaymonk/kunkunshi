@@ -1,27 +1,34 @@
-const positions = {
-  "a":  ["c", 0],
-  "o":  ["d", 0],
-  "r":  ["e", 0],
-  "gr": ["f", 0],
-
-  "4":  ["f", 0],
-  "z":  ["g", 0],
-  "t":  ["a", 0],
-  "s":  ["b", 0],
-  "gs": ["c", 1],
-
-  "k":  ["c", 1],
-  "5":  ["d", 1],
-  "6":  ["e", 1],
-  "7":  ["f", 1],
-  "8":  ["g", 1],
-  "9":  ["a", 1]
+const tunings = {
+  h: {
+    offsets: [0, 5, 12],
+    positions: [
+      ["a", "_", "o", "_", "r", "gr"],
+      ["4", "_", "z", "_", "t", "_", "s", "gs"],
+      ["k", "_", "5", "_", "6", "7", "_", "8", "_", "9"]
+    ]
+  }
 };
 
-function processEvent(evt) {
+const scale = [
+  "c", "cs", "d", "ds", "e", "f", "fs", "g", "gs", "a", "as", "b"
+];
+
+function buildPositionMap(offsets, positions) {
+  let result = {};
+  offsets.forEach((stringOffset, i) => {
+    positions[i].forEach((position, offset) => {
+      result[position] = stringOffset + offset;
+    });
+  });
+  return result;
+}
+
+function processEvent(positions, evt) {
   if (evt.type == "note") {
-    let rawPos = evt.position.replace(/^n/, "");
-    let [pitch, octave] = positions[rawPos];
+    let unprefixedPos = evt.position.replace(/^n/, "");
+    let semitones = positions[unprefixedPos];
+    let pitch = scale[semitones % 12];
+    let octave = Math.floor(semitones / 12);
     if (evt.position.match(/^n/)) octave++;
     let augment = {pitch: pitch, octave: octave};
     return Object.assign(augment, evt);
@@ -31,7 +38,9 @@ function processEvent(evt) {
 }
 
 function normalize(music) {
-  return music.map(e => processEvent(e));
+  let tuning = tunings.h;
+  let positions = buildPositionMap(tuning.offsets, tuning.positions);
+  return music.map(e => processEvent(positions, e));
 }
 
 module.exports = {

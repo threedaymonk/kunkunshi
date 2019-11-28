@@ -1,5 +1,5 @@
 const expect = require("chai").expect;
-const addPitches = require("../pitch-adder").addPitches;
+const addPitches = require("../src/pitch-adder").addPitches;
 
 describe("addPitches", function() {
   function generateMusic(positions) {

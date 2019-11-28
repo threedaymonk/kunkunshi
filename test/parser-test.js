@@ -1,6 +1,6 @@
 const expect = require("chai").expect;
 const stripIndent = require("common-tags").stripIndent;
-const parser = require("../aor-parser");
+const parser = require("../src/aor-parser");
 
 describe("Parser", function() {
   describe("metadata", function() {

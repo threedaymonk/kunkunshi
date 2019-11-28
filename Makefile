@@ -2,11 +2,11 @@
 
 all: test lint
 
-test: aor-parser.js
+test: src/aor-parser.js
 	yarn test
 
 lint:
 	yarn eslint .
 
-aor-parser.js: aor.pegjs
+%-parser.js: %.pegjs
 	yarn pegjs -o $@ $<

@@ -2,10 +2,12 @@ function translateDuration(l) {
   return 4 / l;
 }
 
-function translatePitch(evt) {
-  let pitch = [evt.pitch];
-  for (let i = 0; i < evt.octave; i++) pitch.push("'");
-  return pitch.join("");
+function showOctave(past, current) {
+  let result = [];
+  let indicator = current > past ? "'" : ",";
+  let count = Math.abs(past - current);
+  for (let i = 0; i < count; i++) result.push(indicator);
+  return result.join("");
 }
 
 function countRepeats(music) {
@@ -17,6 +19,7 @@ function countRepeats(music) {
 
 function toLilypond(music) {
   let lastDuration = null;
+  let lastOctave = 0;
   let repeatCounts = countRepeats(music);
   let result = [];
 
@@ -30,7 +33,9 @@ function toLilypond(music) {
 
     switch(evt.type) {
     case "note":
-      element += translatePitch(evt);
+      element += evt.pitch;
+      element += showOctave(lastOctave, evt.octave);
+      lastOctave = evt.octave;
       break;
     case "rest":
       element += "r";

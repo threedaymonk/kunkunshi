@@ -26,13 +26,15 @@ describe("toLilypond", function() {
     expect(toLilypond(music)).to.eql("c4 d8 e4");
   });
 
-  it("marks higher octaves", function() {
+  it("marks changes in octave", function() {
     let music = [
       {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "c", octave: 1},
-      {type: "note", duration: 1, pitch: "c", octave: 2}
+      {type: "note", duration: 1, pitch: "c", octave: 2},
+      {type: "note", duration: 1, pitch: "c", octave: 1},
+      {type: "note", duration: 1, pitch: "c", octave: 0}
     ];
-    expect(toLilypond(music)).to.eql("c4 c' c''");
+    expect(toLilypond(music)).to.eql("c4 c' c' c, c,");
   });
 
   it("exports rests", function() {

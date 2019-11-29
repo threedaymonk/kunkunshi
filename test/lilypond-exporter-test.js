@@ -134,4 +134,14 @@ describe("toLilypond", function() {
       "\\relative c'' { c4 ( b) }"
     );
   });
+
+  it("turns upstrokes into upbows", function() {
+    let music = [
+      {type: "note", duration: 1, pitch: "c", octave: 1},
+      {type: "note", duration: 1, pitch: "c", octave: 1, articulation: "upstroke"}
+    ];
+    expect(toLilypond(music)).to.eql(
+      "\\relative c'' { c4 c \\upbow }"
+    );
+  });
 });

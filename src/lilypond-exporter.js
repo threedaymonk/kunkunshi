@@ -84,6 +84,9 @@ function toLilypond(music) {
     case "hammer":
       element = `( ${element})`;
       break;
+    case "upstroke":
+      element += " \\upbow";
+      break;
     }
 
     result.push(element);

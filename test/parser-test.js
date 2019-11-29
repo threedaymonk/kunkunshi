@@ -136,7 +136,6 @@ describe("Parser", function() {
         a a <- a <A a <B a <C a
       `;
 
-
       expect(parser.parse(input).music.map(n => n.jump))
         .to.eql([undefined, "A", "A", "B", "C", undefined]);
     });
@@ -147,7 +146,6 @@ describe("Parser", function() {
 
         a a' a1/2' a^ a/^
       `;
-
 
       expect(parser.parse(input).music.map(n => n.articulation))
         .to.eql([undefined, "hammer", "hammer", "upstroke", "upstroke"]);

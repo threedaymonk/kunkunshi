@@ -107,7 +107,7 @@ describe("toLilypond", function() {
     expect(toLilypond(music)).to.eql(
       "\\relative c' { \\repeat volta 2 { c4 d e f } }"
     );
-  }); 
+  });
 
   it("exports nested repeats", function() {
     let music = [
@@ -123,7 +123,7 @@ describe("toLilypond", function() {
     expect(toLilypond(music)).to.eql(
       "\\relative c' { \\repeat volta 2 { \\repeat volta 2 { c4 c d d } e e f f } }"
     );
-  }); 
+  });
 
   it("turns hammer-ons into ties", function() {
     let music = [

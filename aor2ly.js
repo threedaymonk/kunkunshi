@@ -29,6 +29,7 @@ let lilypond = toLilypond(music);
 
 fs.writeSync(1, stripIndent`
   \\version "2.18.2"
+  \\include "kunkunshi.ly"
   \\language "english"
 
   \\paper{
@@ -56,9 +57,15 @@ fs.writeSync(1, stripIndent`
   }
 
   \\score {
-    \\new Staff { \\melody }
+    <<
+      \\new Staff { \\melody }
+      \\new TabStaff {
+        \\set TabStaff.stringTunings = #sansagariTuning
+        \\kunkunshiNotation
+        \\melody
+      }
+    >>
     \\layout { }
     \\midi { }
   }
-
 `);

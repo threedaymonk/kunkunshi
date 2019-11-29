@@ -25,6 +25,9 @@ kunkunshiNotation = {
   % Turn off the TAB clef
   \override TabStaff.Clef.stencil = ##f
 
+  % Turn of slurs on kunkunshi
+  \override TabStaff.Slur.stencil = ##f
+
   % Use kunkunshi position numbering
   \set TabStaff.tablatureFormat = #(custom-tab-format kunkunshi-signs)
 }

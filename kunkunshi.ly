@@ -29,6 +29,6 @@ kunkunshiNotation = {
   \set TabStaff.tablatureFormat = #(custom-tab-format kunkunshi-signs)
 }
 
-honchoushiTuning = \stringTuning <c' f' c''>
-niagariTuning    = \stringTuning <c' g' c''>
-sansagariTuning  = \stringTuning <c' f' bes'>
+sanshin-honchoushi-tuning = \stringTuning <c' f' c''>
+sanshin-niage-tuning      = \stringTuning <c' g' c''>
+sanshin-sansage-tuning    = \stringTuning <c' f' bes'>

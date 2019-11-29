@@ -4,8 +4,14 @@ const oneLineTrim = require("common-tags").oneLineTrim;
 const parser = require("./src/aor-parser.js");
 const addPitches = require("./src/pitch-adder").addPitches;
 const toLilypond = require("./src/lilypond-exporter").toLilypond;
-
 const filename = process.argv[2];
+
+const tunings = {
+  "h":  ["honchoushi", "本調子"],
+  "2a": ["niage", "ニ揚げ"],
+  "3s": ["sansage", "三下げ"]
+};
+
 fs.writeSync(2, `Processing ${filename}\n`);
 let input = fs.readFileSync(filename, "UTF-8");
 let tree;
@@ -24,8 +30,11 @@ let options = {
   shaku: tree.metadata.Shaku
 };
 
+let key = tree.metadata.Shaku == "high" ? "c \\major" : "d \\minor";
+
 let music = addPitches(tree.music, options);
-let lilypond = toLilypond(music);
+let [tuningCode, tuningName] = tunings[tree.metadata.Tuning || "h"];
+let melody = toLilypond(music);
 
 fs.writeSync(1, stripIndent`
   \\version "2.18.2"
@@ -43,24 +52,25 @@ fs.writeSync(1, stripIndent`
 
   \\header {
     title = "${tree.metadata.Title}"
+    meter = "${tuningName}"
   }
 
   global = {
     \\time 2/4
-    \\key d \\minor
+    \\key ${key}
   }
 
   melody = {
     \\global
 
-    ${lilypond}
+    ${melody}
   }
 
   \\score {
     <<
       \\new Staff { \\melody }
       \\new TabStaff {
-        \\set TabStaff.stringTunings = #sansagariTuning
+        \\set TabStaff.stringTunings = #sanshin-${tuningCode}-tuning
         \\kunkunshiNotation
         \\melody
       }

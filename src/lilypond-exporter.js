@@ -80,6 +80,12 @@ function toLilypond(music) {
     if (evt.duration != lastDuration) element += translateDuration(evt.duration);
     lastDuration = evt.duration;
 
+    switch (evt.articulation) {
+    case "hammer":
+      element = `( ${element})`;
+      break;
+    }
+
     result.push(element);
 
     if (evt.jump) result.push("}");

@@ -124,4 +124,14 @@ describe("toLilypond", function() {
       "\\relative c' { \\repeat volta 2 { \\repeat volta 2 { c4 c d d } e e f f } }"
     );
   }); 
+
+  it("turns hammer-ons into ties", function() {
+    let music = [
+      {type: "note", duration: 1, pitch: "c", octave: 1},
+      {type: "note", duration: 1, pitch: "b", octave: 0, articulation: "hammer"}
+    ];
+    expect(toLilypond(music)).to.eql(
+      "\\relative c'' { c4 ( b) }"
+    );
+  });
 });

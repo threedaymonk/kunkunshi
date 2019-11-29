@@ -49,7 +49,7 @@ fs.writeSync(1, stripIndent`
     \\key d \\minor
   }
 
-  melody = \\relative c'' {
+  melody = {
     \\global
 
     ${lilypond}

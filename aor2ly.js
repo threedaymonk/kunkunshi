@@ -56,6 +56,7 @@ fs.writeSync(1, stripIndent`
   \\header {
     title = "${doc.title}"
     meter = "${tuningName}"
+    tagline = ""
   }
 
   global = {

@@ -1,7 +1,7 @@
 AORS = $(wildcard music/*.aor)
 TO_CONVERT = $(patsubst %.aor,%.pdf,$(AORS))
 
-.PHONY: test lint music
+.PHONY: test lint music clean
 
 all: test lint
 
@@ -21,3 +21,8 @@ lint:
 	lilypond --pdf --output $* $<
 
 music: $(TO_CONVERT)
+
+clean:
+	rm -f $(patsubst %.aor,%.ly,$(AORS))
+	rm -f $(patsubst %.aor,%.midi,$(AORS))
+	rm -f $(patsubst %.aor,%.pdf,$(AORS))

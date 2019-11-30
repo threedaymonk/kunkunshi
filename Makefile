@@ -1,5 +1,5 @@
 AORS = $(wildcard music/*.aor)
-TO_CONVERT = $(patsubst %.aor,%.ly,$(AORS))
+TO_CONVERT = $(patsubst %.aor,%.pdf,$(AORS))
 
 .PHONY: test lint music
 
@@ -16,5 +16,8 @@ lint:
 
 %.ly: %.aor
 	node ./aor2ly.js $< > $@
+
+%.pdf: %.ly music/kunkunshi.ly
+	lilypond --pdf --output $* $<
 
 music: $(TO_CONVERT)

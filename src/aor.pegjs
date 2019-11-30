@@ -35,8 +35,25 @@ music
   { return events }
 
 event
-  = noteEvent
+  = chordEvent
+  / noteEvent
   / restEvent
+
+chordEvent
+  = mark:mark?
+    "["
+    music:music
+    "]"
+    jump:jump?
+    ws*
+    {
+      return toObject([
+        ['type',  'chord'],
+        ['mark',  mark],
+        ['jump',  jump],
+        ['music', music]
+      ])
+    }
 
 noteEvent
   = mark:mark?

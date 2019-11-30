@@ -159,5 +159,45 @@ describe("Parser", function() {
       expect(parser.parse(input).music.map(n => n.articulation))
         .to.eql([undefined, "hammer", "hammer", "upstroke", "upstroke"]);
     });
+
+    it("combines notes in chords", function() {
+      let input = stripIndent`
+        Title: Test
+
+        [4 5]
+      `;
+
+      expect(parser.parse(input).music).to.eql([{
+        type: "chord",
+        music: [
+          {type: "note", position: "4", duration: 1},
+          {type: "note", position: "5", duration: 1},
+        ]
+      }]);
+    });
+
+    it("applies marks to chords", function() {
+      let input = stripIndent`
+        Title: Test
+
+        a -> [4 5] a
+      `;
+
+      expect(parser.parse(input).music.map(n => n.mark)).to.eql([
+        undefined, "A", undefined
+      ]);
+    });
+
+    it("applies jumps to chords", function() {
+      let input = stripIndent`
+        Title: Test
+
+        a [4 5] <- a
+      `;
+
+      expect(parser.parse(input).music.map(n => n.jump)).to.eql([
+        undefined, "A", undefined
+      ]);
+    });
   });
 });

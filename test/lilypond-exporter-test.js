@@ -116,7 +116,7 @@ describe("toLilypond", function() {
       {type: "note", duration: 1, pitch: "c", octave: 1},
       {type: "note", duration: 1, pitch: "b", octave: 0, articulation: "hammer"}
     ];
-    expect(toLilypond(music)).to.have.string("c4 ( b)");
+    expect(toLilypond(music)).to.have.string("c4( b)");
   });
 
   it("turns upstrokes into upbows", function() {
@@ -125,5 +125,16 @@ describe("toLilypond", function() {
       {type: "note", duration: 1, pitch: "c", octave: 1, articulation: "upstroke"}
     ];
     expect(toLilypond(music)).to.have.string("c4 c \\upbow");
+  });
+
+  it("exports chords", function() {
+    let music = [{
+      type: "chord",
+      music: [
+        {type: "note", duration: 1, pitch: "f", octave: 0},
+        {type: "note", duration: 1, pitch: "d", octave: 1}
+      ]
+    }];
+    expect(toLilypond(music)).to.have.string("<<f4 d'>>");
   });
 });

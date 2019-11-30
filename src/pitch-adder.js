@@ -25,17 +25,29 @@ function buildPositionMap(offsets) {
 }
 
 function processEvent(positionMap, evt) {
-  if (evt.type == "note") {
-    let unprefixedPos = evt.position.replace(/^n/, "");
-    let semitones = positionMap[unprefixedPos];
-    let pitch = scale[semitones % 12];
-    let octave = Math.floor(semitones / 12);
-    if (evt.position.match(/^n/)) octave++;
-    let augment = {pitch: pitch, octave: octave};
-    return Object.assign(augment, evt);
-  } else {
+  switch (evt.type) {
+  case "note":
+    return processNote(positionMap, evt);
+  case "chord":
+    return processChord(positionMap, evt);
+  default:
     return evt;
   }
+}
+
+function processNote(positionMap, evt) {
+  let unprefixedPos = evt.position.replace(/^n/, "");
+  let semitones = positionMap[unprefixedPos];
+  let pitch = scale[semitones % 12];
+  let octave = Math.floor(semitones / 12);
+  if (evt.position.match(/^n/)) octave++;
+
+  return Object.assign(evt, {pitch: pitch, octave: octave});
+}
+
+function processChord(positionMap, evt) {
+  let music = evt.music.map(e => processEvent(positionMap, e));
+  return Object.assign(evt, {music: music});
 }
 
 function addPitches(music, options) {

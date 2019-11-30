@@ -85,6 +85,15 @@ describe("addPitches", function() {
             1, 2, 2, 2, 2
           ]);
       });
+
+      it("adds pitch information to notes in chords", function() {
+        let input = [
+          {type: "chord", music: generateMusic(["a", "4"])}
+        ];
+
+        expect(addPitches(input, options)[0].music.map(n => n.pitch))
+          .to.eql(["c", "f"]);
+      });
     });
 
     describe("with low shaku", function() {

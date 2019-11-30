@@ -4,6 +4,16 @@ const parser = require("../src/aor-parser");
 
 describe("Parser", function() {
   describe("metadata", function() {
+    it("reports itself as version 1", function() {
+      let input = stripIndent`
+        Title: Test
+
+        a
+      `;
+
+      expect(parser.parse(input).version).to.eql(1);
+    });
+
     it("extracts multiple headers", function() {
       let input = stripIndent`
         Title: Hello World
@@ -12,11 +22,8 @@ describe("Parser", function() {
         a
       `;
 
-      expect(parser.parse(input).metadata)
-        .to.eql({
-          "Title": "Hello World",
-          "Info": "I am an example string"
-        });
+      expect(parser.parse(input).title).to.eql("Hello World");
+      expect(parser.parse(input).info).to.eql("I am an example string");
     });
   });
 

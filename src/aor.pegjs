@@ -12,7 +12,7 @@ document
   = metadata:metadata
     newline
     music:music
-    { return { metadata: metadata, music: music } }
+    { return Object.assign({music: music, version: 1}, metadata) }
 
 metadata
   = pairs:mdPair* { return toObject(pairs) }
@@ -25,7 +25,7 @@ mdPair
     { return [key, value] }
 
 mdKey
-  = str:[a-zA-Z]+ { return str.join("") }
+  = str:[a-zA-Z]+ { return str.join("").toLocaleLowerCase() }
 
 mdValue
   = str:[^\r\n]+ { return str.join("") }

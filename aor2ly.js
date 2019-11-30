@@ -2,6 +2,7 @@ const fs = require("fs");
 const stripIndent = require("common-tags").stripIndent;
 const oneLineTrim = require("common-tags").oneLineTrim;
 const parser = require("./src/aor-parser.js");
+const loadInterchange = require("./src/interchange-loader").load;
 const addPitches = require("./src/pitch-adder").addPitches;
 const toLilypond = require("./src/lilypond-exporter").toLilypond;
 const filename = process.argv[2];
@@ -25,15 +26,17 @@ try {
   `;
 }
 
+let doc = loadInterchange(tree);
+
 let options = {
-  tuning: tree.metadata.Tuning,
-  shaku: tree.metadata.Shaku
+  tuning: doc.tuning,
+  shaku: doc.shaku
 };
 
-let key = tree.metadata.Shaku == "high" ? "c \\major" : "d \\minor";
+let key = doc.shaku == "high" ? "c \\major" : "d \\minor";
 
-let music = addPitches(tree.music, options);
-let [tuningCode, tuningName] = tunings[tree.metadata.Tuning || "h"];
+let music = addPitches(doc.music, options);
+let [tuningCode, tuningName] = tunings[doc.tuning];
 let melody = toLilypond(music);
 
 fs.writeSync(1, stripIndent`
@@ -51,7 +54,7 @@ fs.writeSync(1, stripIndent`
   }
 
   \\header {
-    title = "${tree.metadata.Title}"
+    title = "${doc.title}"
     meter = "${tuningName}"
   }
 

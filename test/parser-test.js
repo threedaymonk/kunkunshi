@@ -22,8 +22,10 @@ describe("Parser", function() {
         a
       `;
 
-      expect(parser.parse(input).title).to.eql("Hello World");
-      expect(parser.parse(input).info).to.eql("I am an example string");
+      expect(parser.parse(input)).to.include({
+        title: "Hello World",
+        info: "I am an example string"
+      });
     });
   });
 

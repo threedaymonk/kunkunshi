@@ -158,3 +158,10 @@ Repetitions can be labelled `A>` to `Z>`, or notated as `->` for the default
 - `->` Mark A
 - `A>` Mark A
 - `<B` Jump back to B
+
+### Chords
+
+Two or three notes can be combined together into a chord by surrounding them
+with `[` and `]`:
+
+    [4 5] [4 5] k t

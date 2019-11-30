@@ -27,6 +27,7 @@ musical expressions, e.g.:
 ### Metadata
 
 Metadata entries are in the form `key: value`, one entry per line.
+Keys are case-insensitive, and case may not be preserved.
 In principle, any information can be added as metadata, provided that:
 
 - Each key is unique

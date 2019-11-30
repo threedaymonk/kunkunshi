@@ -11,6 +11,11 @@ ASCII and minimal typing. [Specification](doc/aor.md).
 
 A JavaScript PEG parser implementation is included.
 
+# kks: Kunkunshi interchange format
+
+This will be used as the internal model for these tools and for
+interoperability with other software. [Specification](doc/kks.md).
+
 # Tools
 
 ## Prerequisites

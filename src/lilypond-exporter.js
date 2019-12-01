@@ -19,7 +19,7 @@ function relativeOctave(noteA, octaveA, noteB, octaveB) {
 function countRepeats(sequence) {
   return sequence
     .filter(e => e.type == "jump")
-    .map(e => e.identifier)
+    .map(e => e.label)
     .reduce((a, e) => { a[e] = (a[e] || 0) + 1; return a; }, {});
 }
 
@@ -96,7 +96,7 @@ function emitJump(state) {
 }
 
 function emitMark(state, evt) {
-  for (let i = 0; i < state.repeats[evt.identifier]; i++)
+  for (let i = 0; i < state.repeats[evt.label]; i++)
     state.result.push("\\repeat volta 2 {");
 }
 

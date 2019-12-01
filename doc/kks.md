@@ -64,26 +64,26 @@ Properties:
 ## `jump` event
 
 Jump back to the identically-labelled mark (i.e. an upward-pointing arrow in
-kunkunshi). The same identifier can be used for multiple jumps but must
+kunkunshi). The same label can be used for multiple jumps but must
 refer to an existing earlier `mark`.
 
 Properties:
 
 - `type`: `"jump"`
 
-- `identifier`: string (required)
+- `label`: string (required)
 
 ## `mark` event
 
 Mark this event to jump back to (i.e. a downward-pointing arrow in kunkunshi).
-This identifier must be unique and there must be at least one corresponding
+This label must be unique and there must be at least one corresponding
 `jump`.
 
 Properties:
 
 - `type`: `"mark"`
 
-- `identifier`: string (required)
+- `label`: string (required)
 
 ## `chord` event
 

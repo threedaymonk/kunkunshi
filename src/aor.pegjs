@@ -42,22 +42,22 @@ event
   / restEvent
 
 markEvent
-  = identifier:mark
+  = label:mark
     ws*
     {
       return toObject([
-        ['type',       'mark'],
-        ['identifier', identifier]
+        ['type',  'mark'],
+        ['label', label]
       ])
     }
 
 jumpEvent
-  = identifier:jump
+  = label:jump
     ws*
     {
       return toObject([
-        ['type',       'jump'],
-        ['identifier', identifier]
+        ['type',  'jump'],
+        ['label', label]
       ])
     }
 

@@ -136,7 +136,7 @@ describe("Parser", function() {
       expect(parser.parse(input).music.map(n => n.type)).to.eql([
         "note", "mark", "note", "mark", "note", "mark", "note", "mark", "note"
       ]);
-      expect(parser.parse(input).music.map(n => n.identifier)).to.eql([
+      expect(parser.parse(input).music.map(n => n.label)).to.eql([
         undefined, "A", undefined, "A", undefined, "B", undefined, "C", undefined
       ]);
     });
@@ -151,7 +151,7 @@ describe("Parser", function() {
       expect(parser.parse(input).music.map(n => n.type)).to.eql([
         "note", "jump", "note", "jump", "note", "jump", "note", "jump", "note"
       ]);
-      expect(parser.parse(input).music.map(n => n.identifier)).to.eql([
+      expect(parser.parse(input).music.map(n => n.label)).to.eql([
         undefined, "A", undefined, "A", undefined, "B", undefined, "C", undefined
       ]);
     });

@@ -85,12 +85,12 @@ describe("toLilypond", function() {
 
   it("exports a single repeat", function() {
     let music = [
-      {type: "mark", identifier: "A"},
+      {type: "mark", label: "A"},
       {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "d", octave: 0},
       {type: "note", duration: 1, pitch: "e", octave: 0},
       {type: "note", duration: 1, pitch: "f", octave: 0},
-      {type: "jump", identifier: "A"}
+      {type: "jump", label: "A"}
     ];
     expect(toLilypond(music)).to.have.string(
       "\\repeat volta 2 { c4 d e f }"
@@ -99,17 +99,17 @@ describe("toLilypond", function() {
 
   it("exports nested repeats", function() {
     let music = [
-      {type: "mark", identifier: "A"},
+      {type: "mark", label: "A"},
       {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "d", octave: 0},
       {type: "note", duration: 1, pitch: "d", octave: 0},
-      {type: "jump", identifier: "A"},
+      {type: "jump", label: "A"},
       {type: "note", duration: 1, pitch: "e", octave: 0},
       {type: "note", duration: 1, pitch: "e", octave: 0},
       {type: "note", duration: 1, pitch: "f", octave: 0},
       {type: "note", duration: 1, pitch: "f", octave: 0},
-      {type: "jump", identifier: "A"}
+      {type: "jump", label: "A"}
     ];
     expect(toLilypond(music)).to.have.string(
       "\\repeat volta 2 { \\repeat volta 2 { c4 c d d } e e f f }"

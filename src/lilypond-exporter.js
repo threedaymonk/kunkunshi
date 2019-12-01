@@ -60,6 +60,68 @@ function markOctave(state, evt) {
   return result;
 }
 
+const emit = {
+  chord: (result, state, evt) => {
+    if (evt.articulation == "hammer") {
+      result.push("CONSUME");
+      result.push("(");
+    }
+    result.push("<");
+    result.push("CONSUME");
+    evt.notes.forEach(note => {
+      result.push([
+        note.pitch,
+        markOctave(state, note)
+      ].join(""));
+    });
+    state.pitch = evt.notes[0].pitch;
+    state.octave = evt.notes[0].octave;
+    result.push("CONSUME");
+    result.push([
+      ">",
+      markDuration(state, evt)
+    ].join(""));
+    if (evt.articulation == "upstroke")
+      result.push("\\upbow");
+    if (evt.articulation == "hammer") {
+      result.push("CONSUME");
+      result.push(")");
+    }
+  },
+
+  mark: (result, state, evt) => {
+    for (let i = 0; i < state.repeats[evt.identifier]; i++)
+      result.push("\\repeat volta 2 {");
+  },
+
+  jump: (result) => result.push("}"),
+
+  note: (result, state, evt) => {
+    let element = [
+      evt.pitch,
+      markOctave(state, evt),
+      markDuration(state, evt)
+    ].join("");
+    switch (evt.articulation) {
+    case "hammer":
+      result.push("CONSUME");
+      element = `( ${element})`;
+      break;
+    case "upstroke":
+      element += " \\upbow";
+      break;
+    }
+    result.push(element);
+  },
+
+  rest: (result, state, evt) => {
+    result.push([
+      "r",
+      markDuration(state, evt)
+    ].join(""));
+  }
+};
+
 function toLilypond(sequence) {
   let state = {
     duration: null,
@@ -70,70 +132,7 @@ function toLilypond(sequence) {
   let result = [];
 
   result.push(`\\relative c${showOctave(state.octave + 1)} {`);
-
-  sequence.forEach(evt => {
-    let element;
-    switch(evt.type) {
-    case "chord":
-      if (evt.articulation == "hammer") {
-        result.push("CONSUME");
-        result.push("(");
-      }
-      result.push("<");
-      result.push("CONSUME");
-      evt.notes.forEach(note => {
-        result.push([
-          note.pitch,
-          markOctave(state, note)
-        ].join(""));
-      });
-      state.pitch = evt.notes[0].pitch;
-      state.octave = evt.notes[0].octave;
-      result.push("CONSUME");
-      result.push([
-        ">",
-        markDuration(state, evt)
-      ].join(""));
-      if (evt.articulation == "upstroke")
-        result.push("\\upbow");
-      if (evt.articulation == "hammer") {
-        result.push("CONSUME");
-        result.push(")");
-      }
-      break;
-    case "mark":
-      for (let i = 0; i < state.repeats[evt.identifier]; i++)
-        result.push("\\repeat volta 2 {");
-      break;
-    case "jump":
-      result.push("}");
-      break;
-    case "note":
-      element = [
-        evt.pitch,
-        markOctave(state, evt),
-        markDuration(state, evt)
-      ].join("");
-      switch (evt.articulation) {
-      case "hammer":
-        result.push("CONSUME");
-        element = `( ${element})`;
-        break;
-      case "upstroke":
-        element += " \\upbow";
-        break;
-      }
-      result.push(element);
-      break;
-    case "rest":
-      result.push([
-        "r",
-        markDuration(state, evt)
-      ].join(""));
-      break;
-    }
-  });
-
+  sequence.forEach(evt => emit[evt.type](result, state, evt));
   result.push("}");
 
   return result.join(" ").replace(/\s*CONSUME\s*/g, "");

@@ -2,12 +2,13 @@ const scale = [
   "c", "df", "d", "ef", "e", "f", "gf", "g", "af", "a", "bf", "b"
 ];
 
-function showOctave(rel) {
+function octaveIndicator(rel) {
   let indicator = rel > 0 ? "'" : ",";
   return indicator.repeat(Math.abs(rel));
 }
 
-function relativeOctave(interval) {
+function relativeOctave(noteA, octaveA, noteB, octaveB) {
+  let interval = absolutePitch(noteB, octaveB) - absolutePitch(noteA, octaveA);
   let result = 0;
   let abs = Math.abs(interval);
   let delta = interval > 0 ? 1 : -1;
@@ -26,100 +27,98 @@ function absolutePitch(note, octave) {
   return scale.indexOf(note) + octave * 12;
 }
 
-function interval(lastNote, lastOctave, currentNote, currentOctave) {
-  if (!lastNote) return null;
-
-  let lastAbs = absolutePitch(lastNote, lastOctave);
-  let currentAbs = absolutePitch(currentNote, currentOctave);
-
-  return currentAbs - lastAbs;
-}
-
 function referenceOctave(sequence) {
   let firstNote = sequence.filter(m => m.type == "note")[0];
 
   if (!firstNote) return "";
 
-  return relativeOctave(interval("c", 0, firstNote.pitch, firstNote.octave));
+  return relativeOctave("c", 0, firstNote.pitch, firstNote.octave);
 }
 
-function markDuration(state, evt) {
-  if (!evt.duration) return "";
-  if (evt.duration == state.duration) return "";
+function emitArticulationsBefore(state, evt) {
+  if (evt.articulation == "hammer") {
+    state.result.push("CONSUME");
+    state.result.push("(");
+  }
+}
+
+function emitArticulationsAfter(state, evt) {
+  if (evt.articulation == "upstroke")
+    state.result.push("\\upbow");
+  if (evt.articulation == "hammer") {
+    state.result.push("CONSUME");
+    state.result.push(")");
+  }
+}
+
+function emitPitch(state, evt) {
+  state.result.push(evt.pitch);
+}
+
+function emitDuration(state, evt) {
+  if (evt.duration == state.duration) return;
 
   state.duration = evt.duration;
-  return `${4 / evt.duration}`;
+  state.result.push("CONSUME");
+  state.result.push(`${4 / evt.duration}`);
 }
 
-function markOctave(state, evt) {
-  if (!evt.pitch) return "";
-  let result = showOctave(relativeOctave(
-    interval(state.pitch, state.octave, evt.pitch, evt.octave)));
+function emitOctave(state, evt) {
+  let rel = relativeOctave(state.pitch, state.octave, evt.pitch, evt.octave);
+
   state.octave = evt.octave;
   state.pitch = evt.pitch;
-  return result;
+
+  if (rel == 0) return;
+
+  state.result.push("CONSUME");
+  state.result.push(octaveIndicator(rel));
+}
+
+function emitChord(state, evt) {
+  emitArticulationsBefore(state, evt);
+  state.result.push("<");
+  state.result.push("CONSUME");
+  evt.notes.forEach(note => {
+    emitPitch(state, note);
+    emitOctave(state, note);
+  });
+  state.pitch = evt.notes[0].pitch;
+  state.octave = evt.notes[0].octave;
+  state.result.push("CONSUME");
+  state.result.push(">");
+  emitDuration(state, evt);
+  emitArticulationsAfter(state, evt);
+}
+
+function emitJump(state) {
+  state.result.push("}");
+}
+
+function emitMark(state, evt) {
+  for (let i = 0; i < state.repeats[evt.identifier]; i++)
+    state.result.push("\\repeat volta 2 {");
+}
+
+function emitNote(state, evt) {
+  emitArticulationsBefore(state, evt);
+  emitPitch(state, evt);
+  emitOctave(state, evt);
+  emitDuration(state, evt);
+  emitArticulationsAfter(state, evt);
+}
+
+function emitRest(state, evt) {
+  state.result.push("r");
+  emitDuration(state, evt);
 }
 
 const emit = {
-  chord: (result, state, evt) => {
-    if (evt.articulation == "hammer") {
-      result.push("CONSUME");
-      result.push("(");
-    }
-    result.push("<");
-    result.push("CONSUME");
-    evt.notes.forEach(note => {
-      result.push([
-        note.pitch,
-        markOctave(state, note)
-      ].join(""));
-    });
-    state.pitch = evt.notes[0].pitch;
-    state.octave = evt.notes[0].octave;
-    result.push("CONSUME");
-    result.push([
-      ">",
-      markDuration(state, evt)
-    ].join(""));
-    if (evt.articulation == "upstroke")
-      result.push("\\upbow");
-    if (evt.articulation == "hammer") {
-      result.push("CONSUME");
-      result.push(")");
-    }
-  },
-
-  mark: (result, state, evt) => {
-    for (let i = 0; i < state.repeats[evt.identifier]; i++)
-      result.push("\\repeat volta 2 {");
-  },
-
-  jump: (result) => result.push("}"),
-
-  note: (result, state, evt) => {
-    let element = [
-      evt.pitch,
-      markOctave(state, evt),
-      markDuration(state, evt)
-    ].join("");
-    switch (evt.articulation) {
-    case "hammer":
-      result.push("CONSUME");
-      element = `( ${element})`;
-      break;
-    case "upstroke":
-      element += " \\upbow";
-      break;
-    }
-    result.push(element);
-  },
-
-  rest: (result, state, evt) => {
-    result.push([
-      "r",
-      markDuration(state, evt)
-    ].join(""));
-  }
+  chord: emitChord,
+  jump: emitJump,
+  mark: emitMark,
+  note: emitNote,
+  rest: emitRest
 };
 
 function toLilypond(sequence) {
@@ -127,15 +126,15 @@ function toLilypond(sequence) {
     duration: null,
     pitch: "c",
     octave: referenceOctave(sequence),
-    repeats: countRepeats(sequence)
+    repeats: countRepeats(sequence),
+    result: []
   };
-  let result = [];
 
-  result.push(`\\relative c${showOctave(state.octave + 1)} {`);
-  sequence.forEach(evt => emit[evt.type](result, state, evt));
-  result.push("}");
+  state.result.push(`\\relative c${octaveIndicator(state.octave + 1)} {`);
+  sequence.forEach(evt => emit[evt.type](state, evt));
+  state.result.push("}");
 
-  return result.join(" ").replace(/\s*CONSUME\s*/g, "");
+  return state.result.join(" ").replace(/\s*CONSUME\s*/g, "");
 }
 
 module.exports = {

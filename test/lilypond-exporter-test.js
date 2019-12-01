@@ -156,4 +156,41 @@ describe("toLilypond", function() {
     music = music.concat(music);
     expect(toLilypond(music)).to.have.string("<f d'>4 <f d'>");
   });
+
+  it("applies hammer-ons to chords", function() {
+    let music = [
+      {
+        type: "chord",
+        duration: 1,
+        notes: [
+          {type: "note", pitch: "f", octave: 0},
+          {type: "note", pitch: "c", octave: 1}
+        ]
+      },
+      {
+        type: "chord",
+        articulation: "hammer",
+        duration: 1,
+        notes: [
+          {type: "note", pitch: "g", octave: 0},
+          {type: "note", pitch: "d", octave: 1}
+        ]
+      }
+    ];
+    expect(toLilypond(music)).to.have.string("<f c'>4( <g d'>)");
+  });
+
+  it("applies upstrokes to chords", function() {
+    let music = [{
+      type: "chord",
+      articulation: "upstroke",
+      duration: 1,
+      notes: [
+        {type: "note", pitch: "f", octave: 0},
+        {type: "note", pitch: "d", octave: 1}
+      ]
+    }];
+    expect(toLilypond(music)).to.have.string("<f d'>4 \\upbow");
+  });
+
 });

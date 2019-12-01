@@ -75,6 +75,10 @@ function toLilypond(sequence) {
     let element;
     switch(evt.type) {
     case "chord":
+      if (evt.articulation == "hammer") {
+        result.push("CONSUME");
+        result.push("(");
+      }
       result.push("<");
       result.push("CONSUME");
       evt.notes.forEach(note => {
@@ -90,6 +94,12 @@ function toLilypond(sequence) {
         ">",
         markDuration(state, evt)
       ].join(""));
+      if (evt.articulation == "upstroke")
+        result.push("\\upbow");
+      if (evt.articulation == "hammer") {
+        result.push("CONSUME");
+        result.push(")");
+      }
       break;
     case "mark":
       for (let i = 0; i < state.repeats[evt.identifier]; i++)

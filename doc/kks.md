@@ -1,4 +1,4 @@
-# kks Kunkunshi interchange format
+# kks Kunkunshi interchange format (DRAFT)
 
 ## File format (Version 1)
 

@@ -87,11 +87,15 @@ describe("addPitches", function() {
       });
 
       it("adds pitch information to notes in chords", function() {
-        let input = [
-          {type: "chord", music: generateMusic(["a", "4"])}
-        ];
+        let input = [{
+          type: "chord",
+          notes: [
+            {type: "note", position: "a"},
+            {type: "note", position: "4"}
+          ]
+        }];
 
-        expect(addPitches(input, options)[0].music.map(n => n.pitch))
+        expect(addPitches(input, options)[0].notes.map(n => n.pitch))
           .to.eql(["c", "f"]);
       });
     });

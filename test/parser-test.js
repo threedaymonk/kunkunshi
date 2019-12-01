@@ -126,27 +126,33 @@ describe("Parser", function() {
       ]);
     });
 
-    it("applies repetition start marker to next note", function() {
+    it("parses repetition start markers", function() {
       let input = stripIndent`
         Title: Test
 
-        a -> a A> a B> a C> a a
+        a -> a A> a B> a C> a
       `;
 
-      expect(parser.parse(input).music.map(n => n.mark)).to.eql([
-        undefined, "A", "A", "B", "C", undefined
+      expect(parser.parse(input).music.map(n => n.type)).to.eql([
+        "note", "mark", "note", "mark", "note", "mark", "note", "mark", "note"
+      ]);
+      expect(parser.parse(input).music.map(n => n.identifier)).to.eql([
+        undefined, "A", undefined, "A", undefined, "B", undefined, "C", undefined
       ]);
     });
 
-    it("applies repetition end marker to preceding note", function() {
+    it("parses repetition end markers", function() {
       let input = stripIndent`
         Title: Test
 
-        a a <- a <A a <B a <C a
+        a <- a <A a <B a <C a
       `;
 
-      expect(parser.parse(input).music.map(n => n.jump)).to.eql([
-        undefined, "A", "A", "B", "C", undefined
+      expect(parser.parse(input).music.map(n => n.type)).to.eql([
+        "note", "jump", "note", "jump", "note", "jump", "note", "jump", "note"
+      ]);
+      expect(parser.parse(input).music.map(n => n.identifier)).to.eql([
+        undefined, "A", undefined, "A", undefined, "B", undefined, "C", undefined
       ]);
     });
 
@@ -171,34 +177,23 @@ describe("Parser", function() {
 
       expect(parser.parse(input).music).to.eql([{
         type: "chord",
-        music: [
-          {type: "note", position: "4", duration: 1},
-          {type: "note", position: "5", duration: 1},
+        duration: 1,
+        notes: [
+          {type: "note", position: "4"},
+          {type: "note", position: "5"},
         ]
       }]);
     });
 
-    it("applies marks to chords", function() {
+    it("applies durations to chords", function() {
       let input = stripIndent`
         Title: Test
 
-        a -> [4 5] a
+        [4 5] [4 5]/ [4 5]1/2 [4 5]3/2
       `;
 
-      expect(parser.parse(input).music.map(n => n.mark)).to.eql([
-        undefined, "A", undefined
-      ]);
-    });
-
-    it("applies jumps to chords", function() {
-      let input = stripIndent`
-        Title: Test
-
-        a [4 5] <- a
-      `;
-
-      expect(parser.parse(input).music.map(n => n.jump)).to.eql([
-        undefined, "A", undefined
+      expect(parser.parse(input).music.map(n => n.duration)).to.eql([
+        1, 0.5, 0.5, 1.5
       ]);
     });
   });

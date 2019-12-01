@@ -2,31 +2,6 @@ const scale = [
   "c", "df", "d", "ef", "e", "f", "gf", "g", "af", "a", "bf", "b"
 ];
 
-function makeSequence(events) {
-  let sequence = [];
-  events.forEach(evt => {
-    if (evt.mark) sequence.push({type: "mark", identifier: evt.mark});
-    switch (evt.type) {
-    case "chord":
-      sequence.push({type: "begin_chord"});
-      sequence = sequence.concat(makeSequence(evt.music));
-      sequence.push({type: "end_chord"});
-      break;
-    case "note":
-    case "rest":
-      sequence.push(evt);
-      break;
-    }
-    if (evt.jump) sequence.push({type: "jump", identifier: evt.jump});
-  });
-
-  return sequence;
-}
-
-function translateDuration(l) {
-  return 4 / l;
-}
-
 function showOctave(rel) {
   let indicator = rel > 0 ? "'" : ",";
   return indicator.repeat(Math.abs(rel));
@@ -68,43 +43,67 @@ function referenceOctave(sequence) {
   return relativeOctave(interval("c", 0, firstNote.pitch, firstNote.octave));
 }
 
-function toLilypond(music) {
-  let sequence = makeSequence(music);
-  let lastDuration = null;
-  let lastPitch = "c";
-  let lastOctave = referenceOctave(sequence);
-  let repeatCounts = countRepeats(sequence);
+function markDuration(state, evt) {
+  if (!evt.duration) return "";
+  if (evt.duration == state.duration) return "";
+
+  state.duration = evt.duration;
+  return `${4 / evt.duration}`;
+}
+
+function markOctave(state, evt) {
+  if (!evt.pitch) return "";
+  let result = showOctave(relativeOctave(
+    interval(state.pitch, state.octave, evt.pitch, evt.octave)));
+  state.octave = evt.octave;
+  state.pitch = evt.pitch;
+  return result;
+}
+
+function toLilypond(sequence) {
+  let state = {
+    duration: null,
+    pitch: "c",
+    octave: referenceOctave(sequence),
+    repeats: countRepeats(sequence)
+  };
   let result = [];
 
-  result.push(`\\relative c${showOctave(lastOctave + 1)} {`);
+  result.push(`\\relative c${showOctave(state.octave + 1)} {`);
 
   sequence.forEach(evt => {
     let element;
     switch(evt.type) {
-    case "begin_chord":
-      result.push("<<");
+    case "chord":
+      result.push("<");
       result.push("CONSUME");
-      break;
-    case "end_chord":
+      evt.notes.forEach(note => {
+        result.push([
+          note.pitch,
+          markOctave(state, note)
+        ].join(""));
+      });
+      state.pitch = evt.notes[0].pitch;
+      state.octave = evt.notes[0].octave;
       result.push("CONSUME");
-      result.push(">>");
+      result.push([
+        ">",
+        markDuration(state, evt)
+      ].join(""));
       break;
     case "mark":
-      for (let i = 0; i < repeatCounts[evt.identifier]; i++)
+      for (let i = 0; i < state.repeats[evt.identifier]; i++)
         result.push("\\repeat volta 2 {");
       break;
     case "jump":
       result.push("}");
       break;
     case "note":
-      element = evt.pitch;
-      element += showOctave(relativeOctave(
-        interval(lastPitch, lastOctave, evt.pitch, evt.octave)));
-      if (evt.duration != lastDuration)
-        element += translateDuration(evt.duration);
-      lastDuration = evt.duration;
-      lastOctave = evt.octave;
-      lastPitch = evt.pitch;
+      element = [
+        evt.pitch,
+        markOctave(state, evt),
+        markDuration(state, evt)
+      ].join("");
       switch (evt.articulation) {
       case "hammer":
         result.push("CONSUME");
@@ -117,11 +116,10 @@ function toLilypond(music) {
       result.push(element);
       break;
     case "rest":
-      element = "r";
-      if (evt.duration != lastDuration)
-        element += translateDuration(evt.duration);
-      lastDuration = evt.duration;
-      result.push(element);
+      result.push([
+        "r",
+        markDuration(state, evt)
+      ].join(""));
       break;
     }
   });

@@ -46,8 +46,8 @@ function processNote(positionMap, evt) {
 }
 
 function processChord(positionMap, evt) {
-  let music = evt.music.map(e => processEvent(positionMap, e));
-  return Object.assign(evt, {music: music});
+  let notes = evt.notes.map(e => processEvent(positionMap, e));
+  return Object.assign(evt, {notes: notes});
 }
 
 function addPitches(music, options) {

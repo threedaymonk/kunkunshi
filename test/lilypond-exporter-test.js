@@ -85,10 +85,12 @@ describe("toLilypond", function() {
 
   it("exports a single repeat", function() {
     let music = [
-      {type: "note", duration: 1, pitch: "c", octave: 0, mark: "A"},
+      {type: "mark", identifier: "A"},
+      {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "d", octave: 0},
       {type: "note", duration: 1, pitch: "e", octave: 0},
-      {type: "note", duration: 1, pitch: "f", octave: 0, jump: "A"}
+      {type: "note", duration: 1, pitch: "f", octave: 0},
+      {type: "jump", identifier: "A"}
     ];
     expect(toLilypond(music)).to.have.string(
       "\\repeat volta 2 { c4 d e f }"
@@ -97,14 +99,17 @@ describe("toLilypond", function() {
 
   it("exports nested repeats", function() {
     let music = [
-      {type: "note", duration: 1, pitch: "c", octave: 0, mark: "A"},
+      {type: "mark", identifier: "A"},
+      {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "c", octave: 0},
       {type: "note", duration: 1, pitch: "d", octave: 0},
-      {type: "note", duration: 1, pitch: "d", octave: 0, jump: "A"},
+      {type: "note", duration: 1, pitch: "d", octave: 0},
+      {type: "jump", identifier: "A"},
       {type: "note", duration: 1, pitch: "e", octave: 0},
       {type: "note", duration: 1, pitch: "e", octave: 0},
       {type: "note", duration: 1, pitch: "f", octave: 0},
-      {type: "note", duration: 1, pitch: "f", octave: 0, jump: "A"}
+      {type: "note", duration: 1, pitch: "f", octave: 0},
+      {type: "jump", identifier: "A"}
     ];
     expect(toLilypond(music)).to.have.string(
       "\\repeat volta 2 { \\repeat volta 2 { c4 c d d } e e f f }"
@@ -130,11 +135,25 @@ describe("toLilypond", function() {
   it("exports chords", function() {
     let music = [{
       type: "chord",
-      music: [
-        {type: "note", duration: 1, pitch: "f", octave: 0},
-        {type: "note", duration: 1, pitch: "d", octave: 1}
+      duration: 1,
+      notes: [
+        {type: "note", pitch: "f", octave: 0},
+        {type: "note", pitch: "d", octave: 1}
       ]
     }];
-    expect(toLilypond(music)).to.have.string("<<f4 d'>>");
+    expect(toLilypond(music)).to.have.string("<f d'>4");
+  });
+
+  it("uses first note in chord as relative reference", function() {
+    let music = [{
+      type: "chord",
+      duration: 1,
+      notes: [
+        {type: "note", pitch: "f", octave: 0},
+        {type: "note", pitch: "d", octave: 1}
+      ]
+    }];
+    music = music.concat(music);
+    expect(toLilypond(music)).to.have.string("<f d'>4 <f d'>");
   });
 });

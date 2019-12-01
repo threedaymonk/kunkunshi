@@ -35,56 +35,81 @@ music
   { return events }
 
 event
-  = chordEvent
+  = markEvent
+  / jumpEvent
+  / chordEvent
   / noteEvent
   / restEvent
 
+markEvent
+  = identifier:mark
+    ws*
+    {
+      return toObject([
+        ['type',       'mark'],
+        ['identifier', identifier]
+      ])
+    }
+
+jumpEvent
+  = identifier:jump
+    ws*
+    {
+      return toObject([
+        ['type',       'jump'],
+        ['identifier', identifier]
+      ])
+    }
+
 chordEvent
-  = mark:mark?
-    "["
-    music:music
+  = "["
+    ws*
+    notes:chordNote*
     "]"
-    jump:jump?
+    duration:duration?
+    articulation:articulation?
     ws*
     {
       return toObject([
         ['type',  'chord'],
-        ['mark',  mark],
-        ['jump',  jump],
-        ['music', music]
+        ['notes', notes],
+        ['duration',     duration || 1],
+        ['articulation', articulation]
+      ])
+    }
+
+chordNote
+  = mnemonic:mnemonic
+    ws*
+    {
+      return toObject([
+        ['type',         'note'],
+        ['position',     mnemonic],
       ])
     }
 
 noteEvent
-  = mark:mark?
-    mnemonic:mnemonic
+  = mnemonic:mnemonic
     duration:duration?
     articulation:articulation?
-    jump:jump?
     ws*
     {
       return toObject([
         ['type',         'note'],
         ['position',     mnemonic],
         ['duration',     duration || 1],
-        ['articulation', articulation],
-        ['mark',         mark],
-        ['jump',         jump]
+        ['articulation', articulation]
       ])
     }
 
 restEvent
-  = mark:mark?
-    '0'
+  = '0'
     duration:duration?
-    jump:jump?
     ws*
     {
       return toObject([
         ['type',         'rest'],
-        ['duration',     duration || 1],
-        ['mark',         mark],
-        ['jump',         jump]
+        ['duration',     duration || 1]
       ])
     }
 

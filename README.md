@@ -25,11 +25,16 @@ interoperability with other software. [Specification](doc/kks.md).
 
 Run `yarn install` to install libraries required.
 
-## `aor2ly.js`
+## `aor2kks.js`
 
-This converts a file in `.aor` format to [LilyPond](http://lilypond.org/)
-source code. It uses `kunkunshi.ly` to render the music as a dual Western and
-kunkunshi tablature format.
+This converts a file in [aor](doc/aor.md) format to [kks](doc/kks.md)
+format.
+
+## `kks2ly.js`
+
+This converts a file in [kks](doc/kks.md) format to
+[LilyPond](http://lilypond.org/) source code. It uses `kunkunshi.ly` to render
+the music as a dual Western and kunkunshi tablature format.
 
 ## `music/kunkunshi.ly`
 

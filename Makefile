@@ -14,8 +14,11 @@ lint:
 %-parser.js: %.pegjs
 	yarn pegjs -o $@ $<
 
-%.ly: %.aor
-	node ./aor2ly.js $< > $@
+%.kks: %.aor
+	node ./aor2kks.js $< > $@
+
+%.ly: %.kks
+	node ./kks2ly.js $< > $@
 
 %.pdf: %.ly music/kunkunshi.ly
 	lilypond --pdf --output $* $<

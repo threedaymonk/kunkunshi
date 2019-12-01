@@ -1,7 +1,5 @@
 const fs = require("fs");
 const stripIndent = require("common-tags").stripIndent;
-const oneLineTrim = require("common-tags").oneLineTrim;
-const parser = require("./src/aor-parser.js");
 const loadInterchange = require("./src/interchange-loader").load;
 const addPitches = require("./src/pitch-adder").addPitches;
 const toLilypond = require("./src/lilypond-exporter").toLilypond;
@@ -13,20 +11,7 @@ const tunings = {
   "3s": ["sansage", "三下げ"]
 };
 
-fs.writeSync(2, `Processing ${filename}\n`);
-let input = fs.readFileSync(filename, "UTF-8");
-let tree;
-
-try {
-  tree = parser.parse(input);
-} catch(e) {
-  throw oneLineTrim`
-    Error at line ${e.location.start.line},
-    column ${e.location.start.column}: ${e.message}
-  `;
-}
-
-let doc = loadInterchange(tree);
+let doc = loadInterchange(JSON.parse(fs.readFileSync(filename, "UTF-8")));
 
 let options = {
   tuning: doc.tuning,

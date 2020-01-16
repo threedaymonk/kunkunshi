@@ -1,0 +1,213 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Document root",
+  "description": "Represents a collection of one or more songs.",
+  "required": [ "songs", "version" ],
+  "properties": {
+    "songs": { "$ref": "#/definitions/songs" },
+    "version": { "$ref": "#/definitions/version" }
+  },
+  "definitions": {
+    "articulations": {
+      "type": "array",
+      "title": "Articulations",
+      "description": "Information about how the note is to be played.",
+      "default": [],
+      "items": { "$ref": "#/definitions/articulation" }
+    },
+    "articulation": {
+      "type": "string",
+      "title": "Articulation",
+      "description": "Articulation type. Hammer = `; upstroke = ¬; slur (to next note) = | on left; small = smaller kanji; large = larger kanji; left (hand pluck) = レ",
+      "enum": [ "hammer", "upstroke", "slur", "small", "large", "left" ]
+    },
+    "box": {
+      "type": "object",
+      "title": "Box",
+      "description": "A representation of a single cell of the kunkunshi grid.",
+      "required": [ "events" ],
+      "properties": {
+        "events": { "$ref": "#/definitions/events" }
+      }
+    },
+    "boxOffset": {
+      "type": "number",
+      "title": "Box offset",
+      "description": "Where to vertically position the reference point of this event within the box. 0 represents the start, 1 the middle, and 2 the end.",
+      "examples": [ 1 ],
+      "minimum": 0,
+      "maximum": 2
+    },
+    "events": {
+      "type": "array",
+      "title": "Events",
+      "description": "An array of one or more musical notes, rests, or lyrics within the grid.",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/note" },
+          { "$ref": "#/definitions/rest" },
+          { "$ref": "#/definitions/lyric" }
+        ]
+      }
+    },
+    "jump": {
+      "type": "string",
+      "title": "Jump",
+      "description": "Jump back after this event to the identically-labelled mark (i.e. an upward-pointing arrow in kunkunshi). The same label can be used for multiple jumps but must refer to an existing earlier mark.",
+      "examples": [ "A" ],
+      "pattern": "^(.+)$"
+    },
+    "lyric": {
+      "type": "object",
+      "title": "Lyrics",
+      "description": "Lyrics to be positioned next to the box. The reference point is the vertical centre of the first glyph of the lyric text.",
+      "required": [ "type", "boxOffset", "lyricText" ],
+      "properties": {
+        "type": { "const": "lyric" },
+        "boxOffset": { "$ref": "#/definitions/boxOffset" },
+        "lyricText": { "$ref": "#/definitions/lyricText" }
+      }
+    },
+    "lyricText": {
+      "type": "string",
+      "title": "Lyric text",
+      "description": "Text or fragment",
+      "pattern": "^(.+)$"
+    },
+    "mark": {
+      "type": "string",
+      "title": "Mark",
+      "description": "Mark this as an event to jump back to (i.e. a downward-pointing arrow in kunkunshi). This label must be unique and there must be at least one corresponding jump.",
+      "examples": [ "A" ],
+      "pattern": "^(.+)$"
+    },
+    "music": {
+      "type": "array",
+      "title": "Music",
+      "description": "The musical notation for the piece. Contains one or more boxes.",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/box" }
+    },
+    "note": {
+      "type": "object",
+      "title": "Note",
+      "description": "A note or chord sounded on the sanshin. The reference point is the vertical centre of the glyph (glyphs in the case of a chord).",
+      "required": [ "type", "boxOffset", "stops" ],
+      "properties": {
+        "type": { "const": "note" },
+        "articulations": { "$ref": "#/definitions/articulations" },
+        "mark": { "$ref": "#/definitions/mark" },
+        "jump": { "$ref": "#/definitions/jump" },
+        "boxOffset": { "$ref": "#/definitions/boxOffset" },
+        "stops": { "$ref": "#/definitions/stops" }
+      }
+    },
+    "rest": {
+      "type": "object",
+      "title": "Rest",
+      "description": "Represents the empty circle used to mark a rest in a box",
+      "required": [ "type" ],
+      "properties": {
+        "type": { "const": "rest" },
+        "mark": { "$ref": "#/definitions/mark" },
+        "jump": { "$ref": "#/definitions/jump" }
+      }
+    },
+    "shaku": {
+      "type": "string",
+      "title": "Shaku",
+      "description": "Whether the shaku (尺) finger position represents 5 (`low`) or 6(`high`) semitones above the open middle string. The default is `low`.",
+      "default": "low",
+      "enum": [ "low", "high" ]
+    },
+    "song": {
+      "type": "object",
+      "title": "Song",
+      "description": "Represents a discrete song",
+      "properties": {
+        "shaku": { "$ref": "#/definitions/shaku" },
+        "tempo": { "$ref": "#/definitions/tempo" },
+        "title": { "$ref": "#/definitions/title" },
+        "tuning": { "$ref": "#/definitions/tuning" },
+        "music": { "$ref": "#/definitions/music" }
+      },
+      "required": [
+        "title",
+        "tuning",
+        "music"
+      ]
+    },
+    "songs": {
+      "type": "array",
+      "title": "Songs",
+      "description": "An array of one or more Song objects",
+      "items": { "$ref": "#/definitions/song" }
+    },
+    "stop": {
+      "type": "object",
+      "title": "Stop",
+      "description": "A single left-hand finger position.",
+      "required": [ "position", "string" ],
+      "properties": {
+        "position": {
+          "type": "integer",
+          "title": "Position",
+          "description": "The left-hand position for this note, measured from zero for the open string.",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "string": {
+          "type": "integer",
+          "title": "String",
+          "description": "Which string to play. 1 represents the lowest-pitched string. Must be unique within this stop.",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "accidental": {
+          "type": "string",
+          "title": "Accidental",
+          "description": "Indicates that this stop is to be played sharp or flat of its normal position",
+          "enum": [ "flat", "sharp" ]
+        }
+      }
+    },
+    "stops": {
+      "type": "array",
+      "title": "Stops",
+      "description": "The left-hand position(s) associated with this note.",
+      "items": { "$ref": "#/definitions/stop" },
+      "minItems": 1
+    },
+    "tempo": {
+      "type": "number",
+      "title": "Tempo",
+      "description": "The tempo of the piece in beats per minute. The default is 100.",
+      "default": 100,
+      "minimum": 10,
+      "maximum": 1000
+    },
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "The title of the piece.",
+      "pattern": "^(.+)$"
+    },
+    "tuning": {
+      "type": "string",
+      "title": "Tuning",
+      "description": "A mnemonic representing the tuning: `h` = honchōshi (本調子); `2a` = niage (二揚げ); `3s` = sansage (三下げ); `12a` = ichiniage (一、二揚げ).",
+      "default": "h",
+      "enum": [ "h", "2a", "3s", "12a" ]
+    },
+    "version": {
+      "$id": "#/properties/version",
+      "type": "string",
+      "title": "Version",
+      "description": "The version of the kks specification to which this document conforms. Currently `1.0.0draft`.",
+      "examples": [ "1.0.0draft" ],
+      "pattern": "^(\\d+\\.\\d+\\.\\d+[a-z]*)$"
+    }
+  }
+}
